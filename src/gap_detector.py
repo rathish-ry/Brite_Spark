@@ -5,12 +5,14 @@ from src.retriever import tokenize, STOP_WORDS
 
 # Common policy actions, verbs, question descriptors, and general terms
 GENERAL_TOPIC_TERMS: Set[str] = {
-    "appeal", "appeals", "apply", "application", "determination", "decision",
+    "appeal", "appeals", "apply", "applies", "application", "determination", "decision",
     "income", "residence", "residency", "benefit", "benefits", "payment",
     "award", "review", "overpayment", "grant", "allowance", "qualify",
     "eligibility", "eligible", "hearing", "notice", "time", "limit", "period",
     "file", "lodged", "lodge", "submit", "submission", "make", "request", "receive",
-    "long", "much", "many", "take", "need", "give", "get", "type", "days", "months", "years"
+    "long", "much", "many", "take", "need", "give", "get", "type", "days", "months", "years",
+    "rule", "rules", "regard", "regarding", "exist", "exists", "condition", "conditions", "right", "rights",
+    "applicant", "claimant", "person", "individual", "participant", "recipient"
 }
 
 

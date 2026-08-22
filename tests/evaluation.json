@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "question": "What is the deadline to file an appeal against a decision?",
+    "expected": "REFUSED_CONFLICT",
+    "type": "contradiction"
+  },
+  {
+    "id": 2,
+    "question": "What is the time limit for determination of an application?",
+    "expected": "ANSWERED",
+    "type": "answerable"
+  },
+  {
+    "id": 3,
+    "question": "What rules apply if an applicant is under 18 years of age?",
+    "expected": "ANSWERED",
+    "type": "answerable"
+  },
+  {
+    "id": 4,
+    "question": "What is the basic residency condition for applicants?",
+    "expected": "ANSWERED",
+    "type": "answerable"
+  },
+  {
+    "id": 5,
+    "question": "What are the rules regarding overpayment recovery waiver?",
+    "expected": "ANSWERED",
+    "type": "answerable"
+  },
+  {
+    "id": 6,
+    "question": "What rights of review exist for an applicant?",
+    "expected": "ANSWERED",
+    "type": "answerable"
+  },
+  {
+    "id": 7,
+    "question": "Can a representative submit an appeal for a resident?",
+    "expected": "REFUSED",
+    "type": "apparent-gap"
+  },
+  {
+    "id": 8,
+    "question": "Can an applicant pay their overpayment balance using a credit card online?",
+    "expected": "REFUSED",
+    "type": "apparent-gap"
+  },
+  {
+    "id": 9,
+    "question": "What is the exact dollar amount of the maximum grant for pet care allowance?",
+    "expected": "REFUSED",
+    "type": "ambiguous"
+  },
+  {
+    "id": 10,
+    "question": "What is the capital city of Australia?",
+    "expected": "REFUSED",
+    "type": "irrelevant"
+  }
+]

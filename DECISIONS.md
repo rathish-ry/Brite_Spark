@@ -108,11 +108,20 @@
 1. **Pipeline Orchestrator**: Integrated `run_grounded_assistant` in `src/cli.py` connecting Parser -> Retriever -> Evidence Gate (Gap & Conflict Check) -> Generator -> Citation Validator -> CLI Presenter.
 2. **Interactive CLI Prompt**: Updated `main.py` to support both single-command `--query` execution and an interactive command-line prompt for caseworker questions.
 3. **Unified CLI Output Contract**: Standardized final outputs across all execution paths (`STATUS: ANSWERED`, `STATUS: REFUSED`, `STATUS: REFUSED_CONFLICT`).
+
+---
+
+## Phase 13 — Ten-Question Evaluation
+
+### Decisions Made
+1. **Challenge Benchmark Dataset**: Authored `tests/evaluation.json` containing 10 benchmark questions spanning normal answerable queries (5), apparent gaps (2), contradiction (1), ambiguous query (1), and irrelevant query (1).
+2. **Automated Evaluation Runner**: Built `tests/evaluate.py` executing end-to-end evaluation, checking expected vs actual statuses, logging per-question PASS/FAIL logs, and printing pass/fail totals.
+3. **Honest Reporting**: Logged exact failure details (Question, Expected, Actual, Reason) whenever expected results differ from system outputs.
 ```
 
-Description: Update DECISIONS.md with Phase 12 decisions
+Description: Update DECISIONS.md with Phase 13 decisions
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/DECISIONS.md
 toolAction: Writing DECISIONS.md
-toolSummary: Update DECISIONS.md for Phase 12
+toolSummary: Update DECISIONS.md for Phase 13
