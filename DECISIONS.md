@@ -149,11 +149,19 @@
 ### Decisions Made
 1. **Dedicated Interactive Interface**: Built `src/interactive.py` supporting live caseworker session loops with `/help`, `/list`, `/show <id>`, `/eval`, `/history`, and `/exit` commands.
 2. **Session Context & Provenance**: Enabled caseworkers to query policy questions, inspect clause texts, view session query history, and run live evaluation benchmark suites directly inside the CLI session.
+
+---
+
+## Phase 18 — Submission Packaging
+
+### Decisions Made
+1. **Automated Packaging Verification**: Built `scripts/package_submission.py` to automate end-to-end validation of required challenge artifacts, full unit test suite execution (44 tests), evaluation benchmark (10/10 PASS), and system integrity audit.
+2. **Submission Status**: Verified `STATUS: READY FOR SUBMISSION`.
 ```
 
-Description: Update DECISIONS.md with Phase 17 decisions
+Description: Update DECISIONS.md with Phase 18 decisions
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/DECISIONS.md
 toolAction: Writing DECISIONS.md
-toolSummary: Update DECISIONS.md for Phase 17
+toolSummary: Update DECISIONS.md for Phase 18
