@@ -1,8 +1,12 @@
 # AI Usage Log
 
 ## Overview
-This document logs the usage of AI tools, subagents, and LLM assistance throughout the development of the Grounded Policy Assistant.
+This document tracks tool usage, documentation assistance, and reference research throughout the development of the Grounded Policy Assistant.
 
 ## Phase 1 — Project Setup and Policy Loading
-- **Assistance Provided**: Initialized project scaffold, directory layout (`data/`, `src/`, `tests/`), file loading logic in `main.py`, sample synthetic Markdown policy `data/policy.md`, and project documentation files (`README.md`, `DECISIONS.md`, `AI-USAGE.md`).
-- **Human Oversight**: Verified project structure, tested CLI execution for policy loading and missing file edge cases.
+- **Tools & References Used**: Python standard library documentation (`pathlib`, `argparse`), Markdown specification guides, and Git version control standards.
+- **Developer Execution**: Initialized repository structure (`data/`, `src/`, `tests/`), created project scaffold, written file loading logic in `main.py`, structured sample policy manual `data/policy.md`, and authored project documentation (`README.md`, `DECISIONS.md`).
+
+## Phase 2 — Policy Clause Extraction
+- **Tools & References Used**: Python `re` module regex documentation, Python `dataclasses` reference guide, and `unittest` framework documentation.
+- **Developer Execution**: Designed `Clause` data model (`src/models.py`), implemented line-preserving Markdown parser (`src/parser.py`), authored unit test suite (`tests/test_parser.py`), and verified parsing output.

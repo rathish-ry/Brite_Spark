@@ -1,6 +1,7 @@
 import argparse
 import sys
 from pathlib import Path
+from src.parser import parse_markdown_policy
 
 
 def load_policy(file_path: Path) -> str:
@@ -37,9 +38,16 @@ def main():
     try:
         content = load_policy(policy_path)
         lines = content.splitlines()
-        print(f"SUCCESS: Policy loaded successfully.")
+        clauses = parse_markdown_policy(content, source_file=str(policy_path))
+        
+        print(f"SUCCESS: Policy loaded and parsed successfully.")
         print(f"Total Lines: {len(lines)}")
         print(f"Total Characters: {len(content)}")
+        print(f"Extracted Clauses: {len(clauses)}\n")
+        
+        for clause in clauses:
+            print(clause.summary())
+
     except FileNotFoundError as e:
         print(f"ERROR: {e}", file=sys.stderr)
         print("\nPlease ensure the policy manual is placed at 'data/policy.md' or specify using --policy-path.", file=sys.stderr)
