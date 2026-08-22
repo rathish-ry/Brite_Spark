@@ -141,11 +141,19 @@
 ### Decisions Made
 1. **Comprehensive Health Check**: Built `tests/audit_system.py` auditing file structure completeness, AST Python syntax validity across 31 files, clause parsing integrity (zero duplicate IDs, 1-based line continuity), evaluation dataset validity, and code formatting hygiene.
 2. **Zero Defect Status**: Verified `AUDIT RESULT: ALL SYSTEMS OPERATIONAL`.
+
+---
+
+## Phase 17 — Interactive Caseworker CLI
+
+### Decisions Made
+1. **Dedicated Interactive Interface**: Built `src/interactive.py` supporting live caseworker session loops with `/help`, `/list`, `/show <id>`, `/eval`, `/history`, and `/exit` commands.
+2. **Session Context & Provenance**: Enabled caseworkers to query policy questions, inspect clause texts, view session query history, and run live evaluation benchmark suites directly inside the CLI session.
 ```
 
-Description: Update DECISIONS.md with Phase 16 decisions
+Description: Update DECISIONS.md with Phase 17 decisions
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/DECISIONS.md
 toolAction: Writing DECISIONS.md
-toolSummary: Update DECISIONS.md for Phase 16
+toolSummary: Update DECISIONS.md for Phase 17

@@ -66,11 +66,15 @@ This document tracks tool usage, documentation assistance, and reference researc
 ## Phase 16 — System Integrity Auditing
 - **Tools & References Used**: AST parsing standard library (`ast`), repository integrity verification tools.
 - **Developer Execution**: Created `tests/audit_system.py`, implemented structure, AST syntax, parsing, dataset, and hygiene checks, created unit tests (`tests/test_audit.py`), and verified operational status (`ALL SYSTEMS OPERATIONAL`).
+
+## Phase 17 — Interactive Caseworker CLI
+- **Tools & References Used**: Command loop patterns, CLI session state management.
+- **Developer Execution**: Implemented `src/interactive.py`, added command parser for `/help`, `/list`, `/show`, `/eval`, `/history`, and `/exit`, integrated session history, created unit tests (`tests/test_interactive.py`), and updated `main.py`.
 ```
 
-Description: Update AI-USAGE.md for Phase 16 System Integrity Auditing
+Description: Update AI-USAGE.md for Phase 17 Interactive Caseworker CLI
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/AI-USAGE.md
 toolAction: Writing AI-USAGE.md
-toolSummary: Update AI-USAGE.md for Phase 16
+toolSummary: Update AI-USAGE.md for Phase 17

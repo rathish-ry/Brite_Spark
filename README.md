@@ -27,7 +27,14 @@ Ensure the policy manual Markdown file is placed at `data/policy.md`.
 
 ### CLI Usage
 
-- **Policy Question Execution**:
+- **Interactive Caseworker CLI**:
+  ```bash
+  python main.py
+  # or explicit flag:
+  python main.py --interactive
+  ```
+
+- **Policy Question Single Execution**:
   ```bash
   python main.py --query "How long do I have to appeal?"
   # or short option:
@@ -47,6 +54,14 @@ Ensure the policy manual Markdown file is placed at `data/policy.md`.
   # or short option:
   python main.py -s C003
   ```
+
+### Interactive Commands
+- `/help` — Display available commands
+- `/list` — List extracted clause IDs and headings
+- `/show <id>` — View full text and provenance of a clause
+- `/eval` — Execute the 10-question evaluation benchmark directly in session
+- `/history` — Display session query history
+- `/exit` — Exit caseworker CLI session
 
 ### Run Mandatory Evaluation & Audit Suites
 - **System Integrity Audit**:

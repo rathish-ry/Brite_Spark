@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 from src.parser import parse_markdown_policy
 from src.cli import list_clauses, show_clause, run_grounded_assistant
+from src.interactive import run_interactive_session
 
 
 def load_policy(file_path: Path) -> str:
@@ -45,7 +46,13 @@ def main():
         "-q",
         type=str,
         metavar="QUESTION",
-        help="Run grounded policy query against the manual",
+        help="Run single grounded policy query against the manual",
+    )
+    parser.add_argument(
+        "--interactive",
+        "-i",
+        action="store_true",
+        help="Launch interactive caseworker CLI session",
     )
     parser.add_argument(
         "--top-k",
@@ -78,21 +85,7 @@ def main():
         output = run_grounded_assistant(args.query, clauses, top_k=args.top_k)
         print(output)
     else:
-        print("========================================")
-        print("       GROUNDED POLICY ASSISTANT        ")
-        print("========================================")
-        print(f"Loaded policy manual: {policy_path}")
-        print(f"Extracted Clauses: {len(clauses)}\n")
-        print("Type a policy question to run the grounded assistant (or press Ctrl+C to exit):\n")
-
-        try:
-            user_input = input("Question:\n> ").strip()
-            if user_input:
-                output = run_grounded_assistant(user_input, clauses, top_k=args.top_k)
-                print(f"\n{output}")
-        except (KeyboardInterrupt, EOFError):
-            print("\nExiting Policy Assistant.")
-            sys.exit(0)
+        run_interactive_session(clauses, policy_path=str(policy_path))
 
 
 if __name__ == "__main__":
