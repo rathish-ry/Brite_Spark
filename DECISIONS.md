@@ -63,3 +63,12 @@
 1. **Structured Refusal Contract**: Created `RefusalResponse` in `src/refusal.py` enforcing mandatory challenge fields (`Question`, `REFUSAL`, `Reason`, `Next step`, `STATUS: REFUSED`).
 2. **Actionable Case Escalation**: Included specific next-step caseworker guidance (`"Refer the case to the Benefits Policy Supervisor for a formal policy ruling."`) instead of generic `"I don't know"` responses.
 3. **CLI Integration**: Routed any query failing Evidence Gate validation directly to formatted refusal output.
+
+---
+
+## Phase 8 — Apparent Gap Detection
+
+### Decisions Made
+1. **Qualifier & Entity Term Extraction**: Implemented `detect_apparent_gap` in `src/gap_detector.py` to isolate specific query subjects/qualifiers (e.g., `representative`, `third party`, `credit card`) from general policy topic terms.
+2. **Distinguishing Related from Answered**: Verified whether candidate retrieved clauses contain the specific entity/qualifier requested by the query.
+3. **Explicit Gap Refusals**: Triggered `EvidenceStatus.REFUSE` with detailed explanation whenever a policy topic is retrieved but the specific requested condition/entity is unmentioned in the manual.
