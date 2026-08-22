@@ -49,6 +49,11 @@ Ensure the policy manual Markdown file is placed at `data/policy.md`.
   ```
 
 ### Run Mandatory Evaluation Suites
+- **Performance Benchmarks**:
+  ```bash
+  python tests/benchmark_performance.py
+  ```
+
 - **Citation Accuracy Evaluation**:
   ```bash
   python tests/evaluate_citations.py

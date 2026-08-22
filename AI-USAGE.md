@@ -58,11 +58,15 @@ This document tracks tool usage, documentation assistance, and reference researc
 ## Phase 14 — Citation Evaluation
 - **Tools & References Used**: Citation validation algorithms, information grounding metrics.
 - **Developer Execution**: Built `tests/evaluate_citations.py`, verified presence, existence, support, and strictness of citations across all answerable questions, created unit tests (`tests/test_citation_eval.py`), and reported 100.0% citation accuracy.
+
+## Phase 15 — Performance Benchmarking
+- **Tools & References Used**: Performance profiling standard libraries (`time.perf_counter`, `tracemalloc`).
+- **Developer Execution**: Built `tests/benchmark_performance.py`, measured parsing, indexing, retrieval, evidence gate, and end-to-end latencies alongside net RAM usage, created unit tests (`tests/test_performance.py`), and logged PASS status (12.15ms latency, 0.29MB RAM).
 ```
 
-Description: Update AI-USAGE.md for Phase 14 Citation Evaluation
+Description: Update AI-USAGE.md for Phase 15 Performance Benchmarking
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/AI-USAGE.md
 toolAction: Writing AI-USAGE.md
-toolSummary: Update AI-USAGE.md for Phase 14
+toolSummary: Update AI-USAGE.md for Phase 15

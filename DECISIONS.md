@@ -125,11 +125,19 @@
 ### Decisions Made
 1. **Four-Point Citation Verification**: Created `tests/evaluate_citations.py` verifying that (1) every answerable query has citations, (2) all cited clause IDs exist in `data/policy.md`, (3) cited clauses actually contain supporting terms (`verify_clause_support`), and (4) no uncited claims exist.
 2. **Citation Accuracy Metric**: Reported Citation Accuracy Rate ($100.0\%$) across all benchmark answerable queries.
+
+---
+
+## Phase 15 — Performance Benchmarking
+
+### Decisions Made
+1. **Profiling Metric Tracking**: Created `tests/benchmark_performance.py` using `time.perf_counter` and `tracemalloc` to track parsing/indexing latency, retrieval latency, evidence gate latency, end-to-end query latency, and net RAM footprint.
+2. **Sub-15ms Latency**: Achieved average end-to-end query latency of $\approx 12.15$ ms (target: $< 500$ ms) and net memory footprint of $\approx 0.29$ MB (target: $< 100$ MB).
 ```
 
-Description: Update DECISIONS.md with Phase 14 decisions
+Description: Update DECISIONS.md with Phase 15 decisions
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/DECISIONS.md
 toolAction: Writing DECISIONS.md
-toolSummary: Update DECISIONS.md for Phase 14
+toolSummary: Update DECISIONS.md for Phase 15
