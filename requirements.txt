@@ -1,0 +1,2 @@
+# Core dependencies for Brite Spark Grounded Answer Policy Assistant
+# Phase 1 relies strictly on Python Standard Library to ensure zero extra setup overhead.
