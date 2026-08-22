@@ -133,11 +133,19 @@
 ### Decisions Made
 1. **Profiling Metric Tracking**: Created `tests/benchmark_performance.py` using `time.perf_counter` and `tracemalloc` to track parsing/indexing latency, retrieval latency, evidence gate latency, end-to-end query latency, and net RAM footprint.
 2. **Sub-15ms Latency**: Achieved average end-to-end query latency of $\approx 12.15$ ms (target: $< 500$ ms) and net memory footprint of $\approx 0.29$ MB (target: $< 100$ MB).
+
+---
+
+## Phase 16 — System Integrity Auditing
+
+### Decisions Made
+1. **Comprehensive Health Check**: Built `tests/audit_system.py` auditing file structure completeness, AST Python syntax validity across 31 files, clause parsing integrity (zero duplicate IDs, 1-based line continuity), evaluation dataset validity, and code formatting hygiene.
+2. **Zero Defect Status**: Verified `AUDIT RESULT: ALL SYSTEMS OPERATIONAL`.
 ```
 
-Description: Update DECISIONS.md with Phase 15 decisions
+Description: Update DECISIONS.md with Phase 16 decisions
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/DECISIONS.md
 toolAction: Writing DECISIONS.md
-toolSummary: Update DECISIONS.md for Phase 15
+toolSummary: Update DECISIONS.md for Phase 16
