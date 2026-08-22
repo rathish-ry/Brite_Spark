@@ -14,3 +14,7 @@ This document tracks tool usage, documentation assistance, and reference researc
 ## Phase 3 — Policy Inspection CLI
 - **Tools & References Used**: Python `argparse` documentation, `sys` stderr redirection patterns for testing CLI outputs.
 - **Developer Execution**: Implemented CLI inspection module (`src/cli.py`), wired `--list-clauses` and `--show-clause` flags in `main.py`, created unit tests (`tests/test_cli.py`), and verified CLI outputs.
+
+## Phase 4 — Basic Retrieval
+- **Tools & References Used**: Okapi BM25 ranking algorithm documentation, Information Retrieval literature (IDF formulas), Python math module documentation.
+- **Developer Execution**: Built `BM25Retriever` class (`src/retriever.py`), implemented multi-field indexing, tokenization with stop-word filtering and stemming, wired `--query` / `-q` CLI flag in `main.py`, authored test suite (`tests/test_retriever.py`), and verified retrieval scoring.

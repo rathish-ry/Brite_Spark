@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 from src.parser import parse_markdown_policy
 from src.cli import list_clauses, show_clause
+from src.retriever import BM25Retriever
 
 
 def load_policy(file_path: Path) -> str:
@@ -40,6 +41,19 @@ def main():
         metavar="CLAUSE_ID",
         help="Display full details and original text for a specific clause (e.g. C003)",
     )
+    parser.add_argument(
+        "--query",
+        "-q",
+        type=str,
+        metavar="QUESTION",
+        help="Search policy clauses for a given question/query",
+    )
+    parser.add_argument(
+        "--top-k",
+        type=int,
+        default=5,
+        help="Number of top retrieved clauses to return (default: 5)",
+    )
 
     args = parser.parse_args()
     policy_path = Path(args.policy_path)
@@ -61,12 +75,35 @@ def main():
         found = show_clause(clauses, args.show_clause)
         if not found:
             sys.exit(1)
+    elif args.query:
+        print("========================================")
+        print("       POLICY RETRIEVAL RESULTS         ")
+        print("========================================")
+        print(f"Query: \"{args.query}\"\n")
+
+        retriever = BM25Retriever(clauses)
+        results = retriever.retrieve(args.query, top_k=args.top_k)
+
+        if not results:
+            print("No relevant policy clauses found.")
+        else:
+            for idx, res in enumerate(results, start=1):
+                c = res.clause
+                print(f"Rank {idx}: [{c.id}] Score: {res.score:.4f}")
+                print(f"Section: {c.section}")
+                print(f"Heading: {c.heading}")
+                print(f"Source: {c.source_file} lines {c.source_start}-{c.source_end}")
+                print(f"Matched Terms: {', '.join(res.matched_terms)}")
+                print("Snippet:")
+                snippet = c.text[:200] + "..." if len(c.text) > 200 else c.text
+                print(f"  {snippet}\n")
     else:
         print("========================================")
         print("       GROUNDED POLICY ASSISTANT        ")
         print("========================================")
         print(f"Loaded policy manual: {policy_path}")
         print(f"Extracted Clauses: {len(clauses)}\n")
+        print("Use --query \"QUESTION\" (-q) to search policy clauses.")
         print("Use --list-clauses (-l) to inspect all clause IDs.")
         print("Use --show-clause CLAUSE_ID (-s C001) to view clause details.")
 

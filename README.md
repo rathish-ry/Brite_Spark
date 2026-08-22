@@ -25,18 +25,28 @@ A command-line RAG (Retrieval-Augmented Generation) policy assistant that answer
 ### Place Policy Manual
 Ensure the policy manual Markdown file is placed at `data/policy.md`.
 
-### Run Policy Inspection CLI
-- **View Policy Summary**:
+### CLI Usage
+
+- **Policy Retrieval Query**:
   ```bash
-  python main.py
+  python main.py --query "How long do I have to appeal?"
+  # or short option:
+  python main.py -q "How long do I have to appeal?"
   ```
+
+- **Specify Top-K Results**:
+  ```bash
+  python main.py --query "residency requirements" --top-k 3
+  ```
+
 - **List All Clause IDs and Headings**:
   ```bash
   python main.py --list-clauses
   # or short option:
   python main.py -l
   ```
-- **Show Specific Clause Details and Original Text**:
+
+- **Show Specific Clause Details**:
   ```bash
   python main.py --show-clause C003
   # or short option:
