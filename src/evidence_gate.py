@@ -4,6 +4,7 @@ from src.config import EvidenceGateConfig
 from src.models import Clause, EvidenceDecision, EvidenceStatus
 from src.retriever import RetrievalResult, tokenize
 from src.gap_detector import detect_apparent_gap
+from src.contradiction import ContradictionDetector
 
 RULE_KEYWORDS: Set[str] = {
     "must", "shall", "may", "will", "entitle", "entitled", "require", "required",
@@ -31,11 +32,12 @@ def contains_rule_language(text: str) -> bool:
 class EvidenceGate:
     """
     Safety component that evaluates whether retrieved policy evidence is sufficient
-    to safely answer a given question, including apparent gap detection.
+    to safely answer a given question, checking for gaps and internal contradictions.
     """
 
     def __init__(self, config: EvidenceGateConfig = None):
         self.config = config or EvidenceGateConfig()
+        self.contradiction_detector = ContradictionDetector()
 
     def evaluate(self, query: str, retrieved_results: List[RetrievalResult]) -> EvidenceDecision:
         if not retrieved_results or not query.strip():
@@ -66,7 +68,18 @@ class EvidenceGate:
                 term_coverage=term_coverage,
             )
 
-        # 2. Apparent Gap Detection Check
+        # 2. Contradiction Detection Check
+        conflict_check = self.contradiction_detector.detect(query, eval_clauses)
+        if conflict_check.has_conflict:
+            return EvidenceDecision(
+                status=EvidenceStatus.CONFLICT,
+                reason=conflict_check.reason,
+                supported_clauses=conflict_check.conflicting_clauses,
+                top_score=top_score,
+                term_coverage=term_coverage,
+            )
+
+        # 3. Apparent Gap Detection Check
         gap_check = detect_apparent_gap(query, eval_clauses)
         if gap_check.has_gap:
             return EvidenceDecision(
@@ -77,7 +90,7 @@ class EvidenceGate:
                 term_coverage=term_coverage,
             )
 
-        # 3. Term Coverage Threshold Check
+        # 4. Term Coverage Threshold Check
         if term_coverage < self.config.min_term_coverage:
             return EvidenceDecision(
                 status=EvidenceStatus.REFUSE,
@@ -87,7 +100,7 @@ class EvidenceGate:
                 term_coverage=term_coverage,
             )
 
-        # 4. Rule-like Language Verification
+        # 5. Rule-like Language Verification
         if not contains_rule_language(top_result.clause.text):
             return EvidenceDecision(
                 status=EvidenceStatus.REFUSE,
@@ -97,7 +110,7 @@ class EvidenceGate:
                 term_coverage=term_coverage,
             )
 
-        # 5. Sufficient Evidence
+        # 6. Sufficient Evidence
         return EvidenceDecision(
             status=EvidenceStatus.ANSWERABLE,
             reason="Sufficient grounding evidence identified with high confidence and query coverage.",

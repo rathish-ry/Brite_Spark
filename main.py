@@ -90,6 +90,7 @@ def main():
                 question=args.query,
                 reason=decision.reason,
                 status=decision.status.value,
+                conflicting_clauses=decision.supported_clauses if decision.status == EvidenceStatus.CONFLICT else [],
             )
             print(refusal.format_cli())
         else:

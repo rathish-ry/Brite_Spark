@@ -34,3 +34,7 @@ This document tracks tool usage, documentation assistance, and reference researc
 ## Phase 8 — Apparent Gap Detection
 - **Tools & References Used**: Entity extraction heuristics, gap analysis algorithms in RAG.
 - **Developer Execution**: Built `detect_apparent_gap` (`src/gap_detector.py`), distinguished topic terms from entity qualifiers, integrated gap checks into `EvidenceGate`, authored unit tests (`tests/test_gap_detector.py`), and verified apparent gap refusal responses.
+
+## Phase 9 — Contradiction Detection
+- **Tools & References Used**: Numerical regex parsing, policy conflict resolution standards.
+- **Developer Execution**: Implemented `ContradictionDetector` (`src/contradiction.py`), extracted numerical constraints and units, integrated conflict checks into `EvidenceGate`, added `REFUSED_CONFLICT` CLI formatting, authored unit tests (`tests/test_contradiction.py`), and verified conflict refusal output.

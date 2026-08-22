@@ -72,3 +72,20 @@
 1. **Qualifier & Entity Term Extraction**: Implemented `detect_apparent_gap` in `src/gap_detector.py` to isolate specific query subjects/qualifiers (e.g., `representative`, `third party`, `credit card`) from general policy topic terms.
 2. **Distinguishing Related from Answered**: Verified whether candidate retrieved clauses contain the specific entity/qualifier requested by the query.
 3. **Explicit Gap Refusals**: Triggered `EvidenceStatus.REFUSE` with detailed explanation whenever a policy topic is retrieved but the specific requested condition/entity is unmentioned in the manual.
+
+---
+
+## Phase 9 — Contradiction Detection
+
+### Decisions Made
+1. **Conservative Numerical Conflict Parsing**: Built `ContradictionDetector` in `src/contradiction.py` to compare numerical values paired with units (e.g. `30 days` vs `15 days`) across top-ranked candidate clauses sharing core policy topic keywords.
+2. **Conflict Escalation Refusal**: Integrated `STATUS: REFUSED_CONFLICT` formatting into `RefusalResponse` in `src/refusal.py`, printing both conflicting clauses verbatim alongside source line numbers so caseworkers can see the exact contradiction.
+3. **Preventing Arbitrary Selection**: Ensured the assistant never silently selects one side of an internal policy contradiction.
+```
+
+Description: Update DECISIONS.md with Phase 9 decisions
+IsArtifact: false
+Overwrite: true
+TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/DECISIONS.md
+toolAction: Writing DECISIONS.md
+toolSummary: Update DECISIONS.md for Phase 9

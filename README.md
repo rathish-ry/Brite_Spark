@@ -34,11 +34,6 @@ Ensure the policy manual Markdown file is placed at `data/policy.md`.
   python main.py -q "How long do I have to appeal?"
   ```
 
-- **Refusal Example (Off-topic question)**:
-  ```bash
-  python main.py --query "What is the capital city of Australia?"
-  ```
-
 - **List All Clause IDs and Headings**:
   ```bash
   python main.py --list-clauses
