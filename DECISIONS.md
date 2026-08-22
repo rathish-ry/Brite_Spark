@@ -117,11 +117,19 @@
 1. **Challenge Benchmark Dataset**: Authored `tests/evaluation.json` containing 10 benchmark questions spanning normal answerable queries (5), apparent gaps (2), contradiction (1), ambiguous query (1), and irrelevant query (1).
 2. **Automated Evaluation Runner**: Built `tests/evaluate.py` executing end-to-end evaluation, checking expected vs actual statuses, logging per-question PASS/FAIL logs, and printing pass/fail totals.
 3. **Honest Reporting**: Logged exact failure details (Question, Expected, Actual, Reason) whenever expected results differ from system outputs.
+
+---
+
+## Phase 14 — Citation Evaluation
+
+### Decisions Made
+1. **Four-Point Citation Verification**: Created `tests/evaluate_citations.py` verifying that (1) every answerable query has citations, (2) all cited clause IDs exist in `data/policy.md`, (3) cited clauses actually contain supporting terms (`verify_clause_support`), and (4) no uncited claims exist.
+2. **Citation Accuracy Metric**: Reported Citation Accuracy Rate ($100.0\%$) across all benchmark answerable queries.
 ```
 
-Description: Update DECISIONS.md with Phase 13 decisions
+Description: Update DECISIONS.md with Phase 14 decisions
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/DECISIONS.md
 toolAction: Writing DECISIONS.md
-toolSummary: Update DECISIONS.md for Phase 13
+toolSummary: Update DECISIONS.md for Phase 14

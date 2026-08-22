@@ -54,3 +54,15 @@ This document tracks tool usage, documentation assistance, and reference researc
 ## Phase 13 — Ten-Question Evaluation
 - **Tools & References Used**: Automated benchmark testing, JSON evaluation standards.
 - **Developer Execution**: Created benchmark dataset (`tests/evaluation.json`) covering 5 answerable, 2 apparent gap, 1 contradiction, 1 ambiguous, and 1 irrelevant questions, built evaluation script (`tests/evaluate.py`), logged PASS/FAIL per-question results, and verified zero-failure execution.
+
+## Phase 14 — Citation Evaluation
+- **Tools & References Used**: Citation validation algorithms, information grounding metrics.
+- **Developer Execution**: Built `tests/evaluate_citations.py`, verified presence, existence, support, and strictness of citations across all answerable questions, created unit tests (`tests/test_citation_eval.py`), and reported 100.0% citation accuracy.
+```
+
+Description: Update AI-USAGE.md for Phase 14 Citation Evaluation
+IsArtifact: false
+Overwrite: true
+TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/AI-USAGE.md
+toolAction: Writing AI-USAGE.md
+toolSummary: Update AI-USAGE.md for Phase 14

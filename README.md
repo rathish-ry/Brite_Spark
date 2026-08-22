@@ -48,7 +48,12 @@ Ensure the policy manual Markdown file is placed at `data/policy.md`.
   python main.py -s C003
   ```
 
-### Run Mandatory Evaluation Suite
+### Run Mandatory Evaluation Suites
+- **Citation Accuracy Evaluation**:
+  ```bash
+  python tests/evaluate_citations.py
+  ```
+
 - **Ten-Question End-to-End Evaluation**:
   ```bash
   python tests/evaluate.py
