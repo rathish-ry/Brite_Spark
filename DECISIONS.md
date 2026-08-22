@@ -99,11 +99,20 @@
 1. **Strict Citation Validation**: Built `validate_citations` in `src/citations.py` to reject any answer containing uncited substantive claims or invalid clause IDs.
 2. **Verifiable Sources Block**: Added `format_sources_block` in `src/citations.py` printing clause ID, section, heading, exact source line numbers, and verbatim policy text for caseworker verification.
 3. **Prohibition of Vague References**: Rejected phrases like "According to the manual" in favor of strict clause-level identifiers (`[C053]`).
+
+---
+
+## Phase 12 — CLI Answer Workflow
+
+### Decisions Made
+1. **Pipeline Orchestrator**: Integrated `run_grounded_assistant` in `src/cli.py` connecting Parser -> Retriever -> Evidence Gate (Gap & Conflict Check) -> Generator -> Citation Validator -> CLI Presenter.
+2. **Interactive CLI Prompt**: Updated `main.py` to support both single-command `--query` execution and an interactive command-line prompt for caseworker questions.
+3. **Unified CLI Output Contract**: Standardized final outputs across all execution paths (`STATUS: ANSWERED`, `STATUS: REFUSED`, `STATUS: REFUSED_CONFLICT`).
 ```
 
-Description: Update DECISIONS.md with Phase 11 decisions
+Description: Update DECISIONS.md with Phase 12 decisions
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/DECISIONS.md
 toolAction: Writing DECISIONS.md
-toolSummary: Update DECISIONS.md for Phase 11
+toolSummary: Update DECISIONS.md for Phase 12

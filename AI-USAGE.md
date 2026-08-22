@@ -46,3 +46,7 @@ This document tracks tool usage, documentation assistance, and reference researc
 ## Phase 11 — Clause-Level Citations
 - **Tools & References Used**: Regex tag parsing, citation validation standards.
 - **Developer Execution**: Created `validate_citations` and `format_sources_block` (`src/citations.py`), enforced inline citation checking `[C0XX]`, added verifiable source blocks, authored unit tests (`tests/test_citations.py`), and updated `GroundedGenerator`.
+
+## Phase 12 — CLI Answer Workflow
+- **Tools & References Used**: Orchestration design patterns, CLI UX standards.
+- **Developer Execution**: Integrated `run_grounded_assistant` pipeline (`src/cli.py`), updated `main.py` with interactive prompt and single-query options, authored workflow unit tests (`tests/test_workflow.py`), and verified full answerable and refusal workflows.

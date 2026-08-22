@@ -2,12 +2,7 @@ import argparse
 import sys
 from pathlib import Path
 from src.parser import parse_markdown_policy
-from src.cli import list_clauses, show_clause
-from src.retriever import BM25Retriever
-from src.evidence_gate import EvidenceGate
-from src.models import EvidenceStatus
-from src.refusal import build_refusal_response
-from src.generator import GroundedGenerator
+from src.cli import list_clauses, show_clause, run_grounded_assistant
 
 
 def load_policy(file_path: Path) -> str:
@@ -50,13 +45,13 @@ def main():
         "-q",
         type=str,
         metavar="QUESTION",
-        help="Evaluate question safety and search policy clauses",
+        help="Run grounded policy query against the manual",
     )
     parser.add_argument(
         "--top-k",
         type=int,
         default=5,
-        help="Number of top retrieved clauses to return (default: 5)",
+        help="Number of top retrieved clauses to consider (default: 5)",
     )
 
     args = parser.parse_args()
@@ -80,33 +75,24 @@ def main():
         if not found:
             sys.exit(1)
     elif args.query:
-        retriever = BM25Retriever(clauses)
-        results = retriever.retrieve(args.query, top_k=args.top_k)
-
-        gate = EvidenceGate()
-        decision = gate.evaluate(args.query, results)
-
-        if decision.status != EvidenceStatus.ANSWERABLE:
-            refusal = build_refusal_response(
-                question=args.query,
-                reason=decision.reason,
-                status=decision.status.value,
-                conflicting_clauses=decision.supported_clauses if decision.status == EvidenceStatus.CONFLICT else [],
-            )
-            print(refusal.format_cli())
-        else:
-            generator = GroundedGenerator()
-            answer = generator.generate(args.query, decision.supported_clauses)
-            print(answer.format_cli())
+        output = run_grounded_assistant(args.query, clauses, top_k=args.top_k)
+        print(output)
     else:
         print("========================================")
         print("       GROUNDED POLICY ASSISTANT        ")
         print("========================================")
         print(f"Loaded policy manual: {policy_path}")
         print(f"Extracted Clauses: {len(clauses)}\n")
-        print("Use --query \"QUESTION\" (-q) to test assistant.")
-        print("Use --list-clauses (-l) to inspect all clause IDs.")
-        print("Use --show-clause CLAUSE_ID (-s C001) to view clause details.")
+        print("Type a policy question to run the grounded assistant (or press Ctrl+C to exit):\n")
+
+        try:
+            user_input = input("Question:\n> ").strip()
+            if user_input:
+                output = run_grounded_assistant(user_input, clauses, top_k=args.top_k)
+                print(f"\n{output}")
+        except (KeyboardInterrupt, EOFError):
+            print("\nExiting Policy Assistant.")
+            sys.exit(0)
 
 
 if __name__ == "__main__":
