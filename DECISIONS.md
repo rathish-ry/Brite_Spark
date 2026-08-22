@@ -45,3 +45,12 @@
 1. **Structured Evaluation Dataset**: Created `tests/retrieval_eval.json` with 10 questions mapped to target policy clause IDs from the supplied manual.
 2. **Automated Metrics**: Built `tests/evaluate_retrieval.py` measuring Top-1 (Hit@1), Top-3 (Hit@3), and Top-5 (Hit@5) retrieval accuracy.
 3. **Honest Failure Reporting**: Implemented detailed per-question reports highlighting Top-1 misses and ranking positions without modifying expected ground truth to artificially boost metrics.
+
+---
+
+## Phase 6 — Evidence Gate
+
+### Decisions Made
+1. **Centralized Configuration**: Centralized all safety threshold magic numbers (`min_retrieval_score`, `min_term_coverage`, `min_score_margin`) in `src/config.py` rather than scattering magic values throughout the codebase.
+2. **Deterministic Safety Decisions**: Built `EvidenceGate` in `src/evidence_gate.py` returning structured `EvidenceDecision` (`ANSWERABLE`, `REFUSE`, `CONFLICT`) prior to answer generation.
+3. **Multi-Factor Validation**: Evaluated retrieval confidence score, query key-term coverage across candidate evidence, and presence of directive policy rules (`must`, `shall`, `within`, `eligible`, `exceed`) to prevent answering when evidence is loosely related but incomplete.

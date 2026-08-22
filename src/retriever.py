@@ -139,13 +139,15 @@ class BM25Retriever:
                     raw_scores[idx] += token_idf * (numerator / denominator)
 
         # Collect non-zero matching clauses
-        results: List[RetrievalResult] = []
-        max_score = max(raw_scores) if raw_scores and max(raw_scores) > 0 else 1.0
+        query_max_idf = sum(self.idf[t] for t in set(query_tokens) if t in self.idf)
+        if query_max_idf <= 0:
+            return []
 
+        results: List[RetrievalResult] = []
         for idx, raw_score in enumerate(raw_scores):
             if raw_score > 0:
-                # Calculate normalized score in [0.0, 1.0] range relative to max score
-                norm_score = raw_score / max_score if max_score > 0 else 0.0
+                # Normalize raw BM25 score against maximum possible query IDF sum
+                norm_score = min(1.0, raw_score / query_max_idf)
                 results.append(
                     RetrievalResult(
                         clause=self.clauses[idx],

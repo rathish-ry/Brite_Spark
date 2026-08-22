@@ -4,6 +4,8 @@ from pathlib import Path
 from src.parser import parse_markdown_policy
 from src.cli import list_clauses, show_clause
 from src.retriever import BM25Retriever
+from src.evidence_gate import EvidenceGate
+from src.config import EvidenceGateConfig
 
 
 def load_policy(file_path: Path) -> str:
@@ -46,7 +48,7 @@ def main():
         "-q",
         type=str,
         metavar="QUESTION",
-        help="Search policy clauses for a given question/query",
+        help="Evaluate question safety and search policy clauses",
     )
     parser.add_argument(
         "--top-k",
@@ -77,33 +79,36 @@ def main():
             sys.exit(1)
     elif args.query:
         print("========================================")
-        print("       POLICY RETRIEVAL RESULTS         ")
+        print("       GROUNDED POLICY ASSISTANT        ")
         print("========================================")
-        print(f"Query: \"{args.query}\"\n")
+        print(f"Question: \"{args.query}\"\n")
 
         retriever = BM25Retriever(clauses)
         results = retriever.retrieve(args.query, top_k=args.top_k)
 
+        gate = EvidenceGate()
+        decision = gate.evaluate(args.query, results)
+
+        print("--- EVIDENCE GATE DECISION ---")
+        print(decision.summary())
+        print("------------------------------\n")
+
         if not results:
-            print("No relevant policy clauses found.")
+            print("No relevant policy clauses retrieved.")
         else:
+            print("Retrieved Candidate Clauses:")
             for idx, res in enumerate(results, start=1):
                 c = res.clause
                 print(f"Rank {idx}: [{c.id}] Score: {res.score:.4f}")
-                print(f"Section: {c.section}")
-                print(f"Heading: {c.heading}")
-                print(f"Source: {c.source_file} lines {c.source_start}-{c.source_end}")
-                print(f"Matched Terms: {', '.join(res.matched_terms)}")
-                print("Snippet:")
-                snippet = c.text[:200] + "..." if len(c.text) > 200 else c.text
-                print(f"  {snippet}\n")
+                print(f"Section: {c.section} | Heading: {c.heading}")
+                print(f"Source: {c.source_file} lines {c.source_start}-{c.source_end}\n")
     else:
         print("========================================")
         print("       GROUNDED POLICY ASSISTANT        ")
         print("========================================")
         print(f"Loaded policy manual: {policy_path}")
         print(f"Extracted Clauses: {len(clauses)}\n")
-        print("Use --query \"QUESTION\" (-q) to search policy clauses.")
+        print("Use --query \"QUESTION\" (-q) to test evidence gate & search.")
         print("Use --list-clauses (-l) to inspect all clause IDs.")
         print("Use --show-clause CLAUSE_ID (-s C001) to view clause details.")
 

@@ -27,16 +27,11 @@ Ensure the policy manual Markdown file is placed at `data/policy.md`.
 
 ### CLI Usage
 
-- **Policy Retrieval Query**:
+- **Policy Question & Evidence Gate Check**:
   ```bash
   python main.py --query "How long do I have to appeal?"
   # or short option:
   python main.py -q "How long do I have to appeal?"
-  ```
-
-- **Specify Top-K Results**:
-  ```bash
-  python main.py --query "residency requirements" --top-k 3
   ```
 
 - **List All Clause IDs and Headings**:
@@ -59,7 +54,7 @@ Ensure the policy manual Markdown file is placed at `data/policy.md`.
   python tests/evaluate_retrieval.py
   ```
 
-- **Unit Tests**:
+- **Unit Test Suite**:
   ```bash
   python -m unittest discover -s tests
   ```

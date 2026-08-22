@@ -22,3 +22,7 @@ This document tracks tool usage, documentation assistance, and reference researc
 ## Phase 5 — Retrieval Evaluation
 - **Tools & References Used**: Information Retrieval metric standards (Hit@1, Hit@3, Hit@5), JSON dataset standards.
 - **Developer Execution**: Authored evaluation dataset (`tests/retrieval_eval.json`), built evaluation runner script (`tests/evaluate_retrieval.py`), calculated Top-1, Top-3, and Top-5 retrieval accuracy, and logged honest metric reporting.
+
+## Phase 6 — Evidence Gate
+- **Tools & References Used**: Safety alignment standards, rule-based gate design patterns, enum status models.
+- **Developer Execution**: Designed centralized configuration (`src/config.py`), implemented `EvidenceGate` (`src/evidence_gate.py`) returning `EvidenceDecision`, added term-coverage and directive-language validation, authored unit tests (`tests/test_evidence_gate.py`), and integrated gate into CLI workflow.
