@@ -7,6 +7,7 @@ from src.retriever import BM25Retriever
 from src.evidence_gate import EvidenceGate
 from src.models import EvidenceStatus
 from src.refusal import build_refusal_response
+from src.generator import GroundedGenerator
 
 
 def load_policy(file_path: Path) -> str:
@@ -94,20 +95,9 @@ def main():
             )
             print(refusal.format_cli())
         else:
-            print("========================================")
-            print("       GROUNDED POLICY ASSISTANT        ")
-            print("========================================")
-            print(f"Question:\n> {args.query}\n")
-            print("EVIDENCE GATE: ANSWERABLE")
-            print(f"Confidence Score: {decision.top_score:.4f}")
-            print(f"Term Coverage: {decision.term_coverage:.2%}\n")
-            print("Retrieved Grounding Evidence:")
-            for idx, res in enumerate(results, start=1):
-                c = res.clause
-                print(f"Rank {idx}: [{c.id}] {c.section} — {c.heading}")
-                print(f"Source: {c.source_file} lines {c.source_start}-{c.source_end}")
-                print(f"Text Snippet:\n  {c.text[:200]}...\n")
-            print("STATUS: ANSWERABLE")
+            generator = GroundedGenerator()
+            answer = generator.generate(args.query, decision.supported_clauses)
+            print(answer.format_cli())
     else:
         print("========================================")
         print("       GROUNDED POLICY ASSISTANT        ")

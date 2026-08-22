@@ -81,11 +81,20 @@
 1. **Conservative Numerical Conflict Parsing**: Built `ContradictionDetector` in `src/contradiction.py` to compare numerical values paired with units (e.g. `30 days` vs `15 days`) across top-ranked candidate clauses sharing core policy topic keywords.
 2. **Conflict Escalation Refusal**: Integrated `STATUS: REFUSED_CONFLICT` formatting into `RefusalResponse` in `src/refusal.py`, printing both conflicting clauses verbatim alongside source line numbers so caseworkers can see the exact contradiction.
 3. **Preventing Arbitrary Selection**: Ensured the assistant never silently selects one side of an internal policy contradiction.
+
+---
+
+## Phase 10 — Grounded Answer Construction
+
+### Decisions Made
+1. **Strict Context Isolation**: Built `GroundedGenerator` in `src/generator.py` taking ONLY the user question and Evidence-Gate-approved clauses.
+2. **Deterministic Fact Extraction**: Constructed plain-language answers using exact claims extracted from approved clauses without adding external knowledge or inventing unstated rules.
+3. **Clause Citation Binding**: Embedded clause citation tags `[C0XX]` directly after substantive claims to ensure verifiable source provenance.
 ```
 
-Description: Update DECISIONS.md with Phase 9 decisions
+Description: Update DECISIONS.md with Phase 10 decisions
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/DECISIONS.md
 toolAction: Writing DECISIONS.md
-toolSummary: Update DECISIONS.md for Phase 9
+toolSummary: Update DECISIONS.md for Phase 10
