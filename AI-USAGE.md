@@ -42,3 +42,7 @@ This document tracks tool usage, documentation assistance, and reference researc
 ## Phase 10 — Grounded Answer Construction
 - **Tools & References Used**: Citation binding patterns, grounded synthesis guidelines.
 - **Developer Execution**: Built `GroundedGenerator` (`src/generator.py`), implemented `GroundedAnswer` model, bound clause citations to extracted claim statements, authored unit tests (`tests/test_generator.py`), and integrated generator into `main.py`.
+
+## Phase 11 — Clause-Level Citations
+- **Tools & References Used**: Regex tag parsing, citation validation standards.
+- **Developer Execution**: Created `validate_citations` and `format_sources_block` (`src/citations.py`), enforced inline citation checking `[C0XX]`, added verifiable source blocks, authored unit tests (`tests/test_citations.py`), and updated `GroundedGenerator`.

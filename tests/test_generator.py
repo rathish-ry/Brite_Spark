@@ -1,6 +1,6 @@
 import unittest
 from src.models import Clause
-from src.generator import GroundedGenerator, GroundedAnswer
+from src.generator import GroundedGenerator
 
 
 class TestGroundedGenerator(unittest.TestCase):
@@ -25,6 +25,7 @@ class TestGroundedGenerator(unittest.TestCase):
         self.assertIn("[C053]", answer.answer_text)
         self.assertIn("An appeal must be lodged within 30 days", answer.answer_text)
         self.assertIn("C053", answer.cited_clause_ids)
+        self.assertIn("Source: data/policy.md lines 584-588", answer.sources_text)
 
     def test_generate_empty_clauses_refusal(self):
         query = "Unknown question"

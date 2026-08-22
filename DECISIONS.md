@@ -90,11 +90,20 @@
 1. **Strict Context Isolation**: Built `GroundedGenerator` in `src/generator.py` taking ONLY the user question and Evidence-Gate-approved clauses.
 2. **Deterministic Fact Extraction**: Constructed plain-language answers using exact claims extracted from approved clauses without adding external knowledge or inventing unstated rules.
 3. **Clause Citation Binding**: Embedded clause citation tags `[C0XX]` directly after substantive claims to ensure verifiable source provenance.
+
+---
+
+## Phase 11 — Clause-Level Citations
+
+### Decisions Made
+1. **Strict Citation Validation**: Built `validate_citations` in `src/citations.py` to reject any answer containing uncited substantive claims or invalid clause IDs.
+2. **Verifiable Sources Block**: Added `format_sources_block` in `src/citations.py` printing clause ID, section, heading, exact source line numbers, and verbatim policy text for caseworker verification.
+3. **Prohibition of Vague References**: Rejected phrases like "According to the manual" in favor of strict clause-level identifiers (`[C053]`).
 ```
 
-Description: Update DECISIONS.md with Phase 10 decisions
+Description: Update DECISIONS.md with Phase 11 decisions
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/DECISIONS.md
 toolAction: Writing DECISIONS.md
-toolSummary: Update DECISIONS.md for Phase 10
+toolSummary: Update DECISIONS.md for Phase 11
