@@ -18,3 +18,7 @@ This document tracks tool usage, documentation assistance, and reference researc
 ## Phase 4 — Basic Retrieval
 - **Tools & References Used**: Okapi BM25 ranking algorithm documentation, Information Retrieval literature (IDF formulas), Python math module documentation.
 - **Developer Execution**: Built `BM25Retriever` class (`src/retriever.py`), implemented multi-field indexing, tokenization with stop-word filtering and stemming, wired `--query` / `-q` CLI flag in `main.py`, authored test suite (`tests/test_retriever.py`), and verified retrieval scoring.
+
+## Phase 5 — Retrieval Evaluation
+- **Tools & References Used**: Information Retrieval metric standards (Hit@1, Hit@3, Hit@5), JSON dataset standards.
+- **Developer Execution**: Authored evaluation dataset (`tests/retrieval_eval.json`), built evaluation runner script (`tests/evaluate_retrieval.py`), calculated Top-1, Top-3, and Top-5 retrieval accuracy, and logged honest metric reporting.

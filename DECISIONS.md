@@ -36,3 +36,12 @@
 2. **Weighted Multi-Field Indexing**: Prepend section and heading terms to the clause text during indexing so header keywords carry appropriate importance.
 3. **Tokenization & Light Stemming**: Applied custom stop-word removal and lightweight suffix stemming (`simple_stem`) to capture word variations (e.g., `appeals` -> `appeal`, `residency` -> `residen`).
 4. **Normalized Scores**: Returned score normalized to $[0.0, 1.0]$ range alongside matched query terms for downstream Evidence Gate evaluation.
+
+---
+
+## Phase 5 — Retrieval Evaluation
+
+### Decisions Made
+1. **Structured Evaluation Dataset**: Created `tests/retrieval_eval.json` with 10 questions mapped to target policy clause IDs from the supplied manual.
+2. **Automated Metrics**: Built `tests/evaluate_retrieval.py` measuring Top-1 (Hit@1), Top-3 (Hit@3), and Top-5 (Hit@5) retrieval accuracy.
+3. **Honest Failure Reporting**: Implemented detailed per-question reports highlighting Top-1 misses and ranking positions without modifying expected ground truth to artificially boost metrics.

@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "question": "How long does a person have to file an appeal against a decision?",
+    "expected_clause_ids": ["C053"]
+  },
+  {
+    "id": 2,
+    "question": "What happens if an applicant is under 18 years of age?",
+    "expected_clause_ids": ["C008"]
+  },
+  {
+    "id": 3,
+    "question": "How long can a person be temporarily absent from the County while receiving assistance?",
+    "expected_clause_ids": ["C011"]
+  },
+  {
+    "id": 4,
+    "question": "What income sources are disregarded when calculating award amounts?",
+    "expected_clause_ids": ["C024"]
+  },
+  {
+    "id": 5,
+    "question": "What are the rules regarding overpayment recovery?",
+    "expected_clause_ids": ["C038", "C040"]
+  },
+  {
+    "id": 6,
+    "question": "What is the time limit for determination of an application?",
+    "expected_clause_ids": ["C033"]
+  },
+  {
+    "id": 7,
+    "question": "What are the general residency requirements to qualify for support?",
+    "expected_clause_ids": ["C010"]
+  },
+  {
+    "id": 8,
+    "question": "Can a recipient request an internal review of a determination?",
+    "expected_clause_ids": ["C049"]
+  },
+  {
+    "id": 9,
+    "question": "What are the obligations of a recipient to report changes in circumstances?",
+    "expected_clause_ids": ["C015"]
+  },
+  {
+    "id": 10,
+    "question": "What happens if a recipient deliberately misrepresents their financial circumstances?",
+    "expected_clause_ids": ["C043"]
+  }
+]

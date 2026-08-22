@@ -53,7 +53,13 @@ Ensure the policy manual Markdown file is placed at `data/policy.md`.
   python main.py -s C003
   ```
 
-### Run Tests
-```bash
-python -m unittest discover -s tests
-```
+### Run Evaluation Suites
+- **Retrieval Evaluation (Hit@1, Hit@3, Hit@5)**:
+  ```bash
+  python tests/evaluate_retrieval.py
+  ```
+
+- **Unit Tests**:
+  ```bash
+  python -m unittest discover -s tests
+  ```
