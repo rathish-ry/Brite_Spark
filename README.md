@@ -2,7 +2,7 @@
 
 A command-line RAG (Retrieval-Augmented Generation) policy assistant that answers policy questions strictly from a supplied Markdown policy manual with clause-level citations and safe refusal mechanisms.
 
-## Quickstart (Phase 1)
+## Quickstart
 
 ### Requirements
 - Python 3.10+
@@ -25,13 +25,25 @@ A command-line RAG (Retrieval-Augmented Generation) policy assistant that answer
 ### Place Policy Manual
 Ensure the policy manual Markdown file is placed at `data/policy.md`.
 
-### Run
-To verify policy manual loading:
-```bash
-python main.py
-```
+### Run Policy Inspection CLI
+- **View Policy Summary**:
+  ```bash
+  python main.py
+  ```
+- **List All Clause IDs and Headings**:
+  ```bash
+  python main.py --list-clauses
+  # or short option:
+  python main.py -l
+  ```
+- **Show Specific Clause Details and Original Text**:
+  ```bash
+  python main.py --show-clause C003
+  # or short option:
+  python main.py -s C003
+  ```
 
-To specify a custom policy manual path:
+### Run Tests
 ```bash
-python main.py --policy-path path/to/custom_policy.md
+python -m unittest discover -s tests
 ```

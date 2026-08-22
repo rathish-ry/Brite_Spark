@@ -10,3 +10,7 @@ This document tracks tool usage, documentation assistance, and reference researc
 ## Phase 2 — Policy Clause Extraction
 - **Tools & References Used**: Python `re` module regex documentation, Python `dataclasses` reference guide, and `unittest` framework documentation.
 - **Developer Execution**: Designed `Clause` data model (`src/models.py`), implemented line-preserving Markdown parser (`src/parser.py`), authored unit test suite (`tests/test_parser.py`), and verified parsing output.
+
+## Phase 3 — Policy Inspection CLI
+- **Tools & References Used**: Python `argparse` documentation, `sys` stderr redirection patterns for testing CLI outputs.
+- **Developer Execution**: Implemented CLI inspection module (`src/cli.py`), wired `--list-clauses` and `--show-clause` flags in `main.py`, created unit tests (`tests/test_cli.py`), and verified CLI outputs.

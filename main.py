@@ -2,6 +2,7 @@ import argparse
 import sys
 from pathlib import Path
 from src.parser import parse_markdown_policy
+from src.cli import list_clauses, show_clause
 
 
 def load_policy(file_path: Path) -> str:
@@ -26,28 +27,26 @@ def main():
         default="data/policy.md",
         help="Path to the policy manual Markdown file (default: data/policy.md)",
     )
+    parser.add_argument(
+        "--list-clauses",
+        "-l",
+        action="store_true",
+        help="List all extracted policy clause IDs, sections, and headings",
+    )
+    parser.add_argument(
+        "--show-clause",
+        "-s",
+        type=str,
+        metavar="CLAUSE_ID",
+        help="Display full details and original text for a specific clause (e.g. C003)",
+    )
 
     args = parser.parse_args()
     policy_path = Path(args.policy_path)
 
-    print("========================================")
-    print("       GROUNDED POLICY ASSISTANT        ")
-    print("========================================")
-    print(f"Loading policy manual from: {policy_path}")
-
     try:
         content = load_policy(policy_path)
-        lines = content.splitlines()
         clauses = parse_markdown_policy(content, source_file=str(policy_path))
-        
-        print(f"SUCCESS: Policy loaded and parsed successfully.")
-        print(f"Total Lines: {len(lines)}")
-        print(f"Total Characters: {len(content)}")
-        print(f"Extracted Clauses: {len(clauses)}\n")
-        
-        for clause in clauses:
-            print(clause.summary())
-
     except FileNotFoundError as e:
         print(f"ERROR: {e}", file=sys.stderr)
         print("\nPlease ensure the policy manual is placed at 'data/policy.md' or specify using --policy-path.", file=sys.stderr)
@@ -55,6 +54,21 @@ def main():
     except Exception as e:
         print(f"ERROR: Unexpected error loading policy: {e}", file=sys.stderr)
         sys.exit(1)
+
+    if args.list_clauses:
+        list_clauses(clauses)
+    elif args.show_clause:
+        found = show_clause(clauses, args.show_clause)
+        if not found:
+            sys.exit(1)
+    else:
+        print("========================================")
+        print("       GROUNDED POLICY ASSISTANT        ")
+        print("========================================")
+        print(f"Loaded policy manual: {policy_path}")
+        print(f"Extracted Clauses: {len(clauses)}\n")
+        print("Use --list-clauses (-l) to inspect all clause IDs.")
+        print("Use --show-clause CLAUSE_ID (-s C001) to view clause details.")
 
 
 if __name__ == "__main__":
