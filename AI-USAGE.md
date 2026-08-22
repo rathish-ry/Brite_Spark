@@ -26,3 +26,7 @@ This document tracks tool usage, documentation assistance, and reference researc
 ## Phase 6 — Evidence Gate
 - **Tools & References Used**: Safety alignment standards, rule-based gate design patterns, enum status models.
 - **Developer Execution**: Designed centralized configuration (`src/config.py`), implemented `EvidenceGate` (`src/evidence_gate.py`) returning `EvidenceDecision`, added term-coverage and directive-language validation, authored unit tests (`tests/test_evidence_gate.py`), and integrated gate into CLI workflow.
+
+## Phase 7 — Refusal System
+- **Tools & References Used**: Policy escalation protocols, structured CLI output guidelines.
+- **Developer Execution**: Implemented `RefusalResponse` (`src/refusal.py`), created escalation next-step builder, authored unit tests (`tests/test_refusal.py`), and integrated refusal output path into `main.py`.

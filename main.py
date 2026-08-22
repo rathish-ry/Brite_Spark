@@ -5,7 +5,8 @@ from src.parser import parse_markdown_policy
 from src.cli import list_clauses, show_clause
 from src.retriever import BM25Retriever
 from src.evidence_gate import EvidenceGate
-from src.config import EvidenceGateConfig
+from src.models import EvidenceStatus
+from src.refusal import build_refusal_response
 
 
 def load_policy(file_path: Path) -> str:
@@ -78,37 +79,41 @@ def main():
         if not found:
             sys.exit(1)
     elif args.query:
-        print("========================================")
-        print("       GROUNDED POLICY ASSISTANT        ")
-        print("========================================")
-        print(f"Question: \"{args.query}\"\n")
-
         retriever = BM25Retriever(clauses)
         results = retriever.retrieve(args.query, top_k=args.top_k)
 
         gate = EvidenceGate()
         decision = gate.evaluate(args.query, results)
 
-        print("--- EVIDENCE GATE DECISION ---")
-        print(decision.summary())
-        print("------------------------------\n")
-
-        if not results:
-            print("No relevant policy clauses retrieved.")
+        if decision.status != EvidenceStatus.ANSWERABLE:
+            refusal = build_refusal_response(
+                question=args.query,
+                reason=decision.reason,
+                status=decision.status.value,
+            )
+            print(refusal.format_cli())
         else:
-            print("Retrieved Candidate Clauses:")
+            print("========================================")
+            print("       GROUNDED POLICY ASSISTANT        ")
+            print("========================================")
+            print(f"Question:\n> {args.query}\n")
+            print("EVIDENCE GATE: ANSWERABLE")
+            print(f"Confidence Score: {decision.top_score:.4f}")
+            print(f"Term Coverage: {decision.term_coverage:.2%}\n")
+            print("Retrieved Grounding Evidence:")
             for idx, res in enumerate(results, start=1):
                 c = res.clause
-                print(f"Rank {idx}: [{c.id}] Score: {res.score:.4f}")
-                print(f"Section: {c.section} | Heading: {c.heading}")
-                print(f"Source: {c.source_file} lines {c.source_start}-{c.source_end}\n")
+                print(f"Rank {idx}: [{c.id}] {c.section} — {c.heading}")
+                print(f"Source: {c.source_file} lines {c.source_start}-{c.source_end}")
+                print(f"Text Snippet:\n  {c.text[:200]}...\n")
+            print("STATUS: ANSWERABLE")
     else:
         print("========================================")
         print("       GROUNDED POLICY ASSISTANT        ")
         print("========================================")
         print(f"Loaded policy manual: {policy_path}")
         print(f"Extracted Clauses: {len(clauses)}\n")
-        print("Use --query \"QUESTION\" (-q) to test evidence gate & search.")
+        print("Use --query \"QUESTION\" (-q) to test assistant.")
         print("Use --list-clauses (-l) to inspect all clause IDs.")
         print("Use --show-clause CLAUSE_ID (-s C001) to view clause details.")
 

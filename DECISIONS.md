@@ -54,3 +54,12 @@
 1. **Centralized Configuration**: Centralized all safety threshold magic numbers (`min_retrieval_score`, `min_term_coverage`, `min_score_margin`) in `src/config.py` rather than scattering magic values throughout the codebase.
 2. **Deterministic Safety Decisions**: Built `EvidenceGate` in `src/evidence_gate.py` returning structured `EvidenceDecision` (`ANSWERABLE`, `REFUSE`, `CONFLICT`) prior to answer generation.
 3. **Multi-Factor Validation**: Evaluated retrieval confidence score, query key-term coverage across candidate evidence, and presence of directive policy rules (`must`, `shall`, `within`, `eligible`, `exceed`) to prevent answering when evidence is loosely related but incomplete.
+
+---
+
+## Phase 7 — Refusal System
+
+### Decisions Made
+1. **Structured Refusal Contract**: Created `RefusalResponse` in `src/refusal.py` enforcing mandatory challenge fields (`Question`, `REFUSAL`, `Reason`, `Next step`, `STATUS: REFUSED`).
+2. **Actionable Case Escalation**: Included specific next-step caseworker guidance (`"Refer the case to the Benefits Policy Supervisor for a formal policy ruling."`) instead of generic `"I don't know"` responses.
+3. **CLI Integration**: Routed any query failing Evidence Gate validation directly to formatted refusal output.

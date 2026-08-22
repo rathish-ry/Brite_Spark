@@ -27,11 +27,16 @@ Ensure the policy manual Markdown file is placed at `data/policy.md`.
 
 ### CLI Usage
 
-- **Policy Question & Evidence Gate Check**:
+- **Policy Question Execution**:
   ```bash
   python main.py --query "How long do I have to appeal?"
   # or short option:
   python main.py -q "How long do I have to appeal?"
+  ```
+
+- **Refusal Example (Off-topic question)**:
+  ```bash
+  python main.py --query "What is the capital city of Australia?"
   ```
 
 - **List All Clause IDs and Headings**:
