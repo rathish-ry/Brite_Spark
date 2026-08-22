@@ -63,8 +63,13 @@ Ensure the policy manual Markdown file is placed at `data/policy.md`.
 - `/history` — Display session query history
 - `/exit` — Exit caseworker CLI session
 
-### Submission Packaging & Verification
-- **Run Full Submission Verification**:
+### Verification & Submission Packaging
+- **Run Final Compliance Audit**:
+  ```bash
+  python scripts/final_verification.py
+  ```
+
+- **Run Submission Verification Package**:
   ```bash
   python scripts/package_submission.py
   ```
