@@ -8,6 +8,7 @@ from src.interactive import run_interactive_session
 
 def load_policy(file_path: Path) -> str:
     """
+    
     Loads the policy manual from the given file path.
     Raises FileNotFoundError if the file does not exist.
     """

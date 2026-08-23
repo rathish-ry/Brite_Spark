@@ -1,6 +1,6 @@
 from dataclasses import dataclass, asdict
 from enum import Enum
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 
 class EvidenceStatus(str, Enum):
@@ -13,6 +13,7 @@ class EvidenceStatus(str, Enum):
 class Clause:
     """
     Represents a structured policy clause extracted from Markdown.
+    Supports temporal policy metadata and amendment tracking.
     """
     id: str
     section: str
@@ -21,12 +22,18 @@ class Clause:
     source_start: int
     source_end: int
     source_file: str = "data/policy.md"
+    amendment_id: Optional[str] = None
+    effective_date: str = "1970-01-01"
+    applicability_type: str = "general"  # "determination", "change_of_circumstance", "transitional", "general"
+    amendment_type: Optional[str] = None  # "substitution", "insertion", "transitional"
+    target_clause_id: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
     def summary(self) -> str:
-        return f"[{self.id}] {self.section} — {self.heading} (Lines {self.source_start}-{self.source_end})"
+        amd_info = f" [Amd {self.amendment_id}]" if self.amendment_id else ""
+        return f"[{self.id}]{amd_info} {self.section} — {self.heading} (Lines {self.source_start}-{self.source_end})"
 
 
 @dataclass
