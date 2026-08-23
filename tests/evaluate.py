@@ -5,12 +5,11 @@ from pathlib import Path
 # Add project root to sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from src.parser import parse_markdown_policy
+from main import load_combined_corpus
 from src.retriever import BM25Retriever
 from src.evidence_gate import EvidenceGate
 from src.models import EvidenceStatus
-from src.generator import GroundedGenerator
-from src.refusal import build_refusal_response
+from src.temporal import extract_temporal_context, filter_temporally_applicable_clauses
 
 
 def normalize_status(status_enum: EvidenceStatus) -> str:
@@ -25,8 +24,13 @@ def normalize_status(status_enum: EvidenceStatus) -> str:
         return "REFUSED"
 
 
-def run_evaluation(policy_path: str = "data/policy.md", eval_path: str = "tests/evaluation.json"):
+def run_evaluation(
+    policy_path: str = "data/policy.md",
+    amendment_path: str = "data/Amendment No. 2026-01.md",
+    eval_path: str = "tests/evaluation.json",
+):
     policy_file = Path(policy_path)
+    amendment_file = Path(amendment_path)
     eval_file = Path(eval_path)
 
     if not policy_file.exists():
@@ -37,11 +41,7 @@ def run_evaluation(policy_path: str = "data/policy.md", eval_path: str = "tests/
         print(f"ERROR: Evaluation file not found at {eval_file}", file=sys.stderr)
         sys.exit(1)
 
-    with open(policy_file, "r", encoding="utf-8") as f:
-        policy_content = f.read()
-
-    clauses = parse_markdown_policy(policy_content, source_file=str(policy_file))
-    retriever = BM25Retriever(clauses)
+    clauses = load_combined_corpus(policy_file, amendment_file)
     gate = EvidenceGate()
 
     with open(eval_file, "r", encoding="utf-8") as f:
@@ -51,13 +51,17 @@ def run_evaluation(policy_path: str = "data/policy.md", eval_path: str = "tests/
     failed_count = 0
     failures = []
 
-    print("Brite Spark Evaluation\n")
+    print("Brite Spark Day 2 Evaluation Benchmark Suite\n")
 
     for case in eval_cases:
         case_id = case["id"]
         question = case["question"]
         expected = case["expected"]
 
+        ctx = extract_temporal_context(question)
+        app_clauses = filter_temporally_applicable_clauses(clauses, ctx)
+
+        retriever = BM25Retriever(app_clauses)
         results = retriever.retrieve(question, top_k=5)
         decision = gate.evaluate(question, results)
         actual = normalize_status(decision.status)

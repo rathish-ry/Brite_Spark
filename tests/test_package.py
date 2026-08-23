@@ -11,7 +11,7 @@ class TestSubmissionPackaging(unittest.TestCase):
         ok, passed, total = run_eval_benchmark()
         self.assertTrue(ok)
         self.assertEqual(passed, total)
-        self.assertEqual(total, 10)
+        self.assertEqual(total, 18)
 
 
 if __name__ == "__main__":

@@ -13,7 +13,8 @@ GENERAL_TOPIC_TERMS: Set[str] = {
     "long", "much", "many", "take", "need", "give", "get", "type", "days", "months", "years",
     "rule", "rules", "regard", "regarding", "exist", "exists", "condition", "conditions", "right", "rights",
     "applicant", "claimant", "person", "individual", "participant", "recipient",
-    "household", "happen", "happened", "occur", "occurred", "report", "reporting"
+    "household", "happen", "happened", "occur", "occurred", "report", "reporting",
+    "percent", "percentage", "rate", "recovery", "amount", "figure", "figures"
 }
 
 

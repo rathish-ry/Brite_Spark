@@ -82,11 +82,31 @@ This document tracks tool usage, documentation assistance, and reference researc
 ## Phase 20 — Final Release & Project Handoff
 - **Tools & References Used**: Project documentation standards, release validation tools.
 - **Developer Execution**: Compiled final documentation suite (`README.md`, `DECISIONS.md`, `AI-USAGE.md`), ran complete release verification suite (49 unit tests OK, 10/10 benchmark PASS, 100% citation accuracy, sub-15ms latency, zero defects), and completed project handoff.
+
+## Phase 21 — Amendment Parsing and Policy Metadata
+- **Tools & References Used**: Python dataclasses and regex pattern matching.
+- **Developer Execution**: Created `src/amendment_parser.py`, extended `Clause` model with temporal metadata, added `tests/test_amendment_parser.py`, and verified amendment parsing.
+
+## Phase 22 — Date-Aware Policy Applicability
+- **Tools & References Used**: Temporal date parsing algorithms and context resolution patterns.
+- **Developer Execution**: Created `src/temporal.py`, implemented determination date, change date, and spanning period applicability rules, created `tests/test_temporal.py`, and verified temporal filtering.
+
+## Phase 23 — Integrate Temporal Logic with BM25
+- **Tools & References Used**: Pipeline integration standards and information retrieval frameworks.
+- **Developer Execution**: Integrated temporal resolution into `src/cli.py` and `main.py`, created `tests/test_temporal_retrieval.py`, updated active numerical constraint extraction in `src/contradiction.py`, and verified end-to-end temporal BM25 retrieval.
+
+## Phase 24 — Grounded Answers and Citations for Amendments
+- **Tools & References Used**: Dual citation binding standards and verifiable source formatting.
+- **Developer Execution**: Updated `src/generator.py` to bind both substantive amendment rule clauses and Section 5 transitional clauses, created `tests/test_amendment_citations.py`, and verified dual-citation outputs.
+
+## Phase 25 — Day 2 Evaluation and Regression
+- **Tools & References Used**: Automated benchmark testing frameworks and release audit scripts.
+- **Developer Execution**: Extended `tests/evaluation.json` and `tests/evaluate.py` to 18 temporal benchmark queries, ran full verification suite (62 unit tests OK, 18/18 benchmark PASS), updated `README.md`, `DECISIONS.md`, and `AI-USAGE.md`, and completed Day 2 temporal policy release.
 ```
 
-Description: Update AI-USAGE.md for Phase 20 Final Release & Handoff
+Description: Update AI-USAGE.md for Phase 25 Day 2 Evaluation & Regression
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/AI-USAGE.md
 toolAction: Writing AI-USAGE.md
-toolSummary: Update AI-USAGE.md for Phase 20
+toolSummary: Update AI-USAGE.md for Phase 25

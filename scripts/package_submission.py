@@ -13,9 +13,10 @@ from tests.audit_system import (
     audit_eval_datasets,
 )
 from tests.evaluate import normalize_status
-from src.parser import parse_markdown_policy
+from main import load_combined_corpus
 from src.retriever import BM25Retriever
 from src.evidence_gate import EvidenceGate
+from src.temporal import extract_temporal_context, filter_temporally_applicable_clauses
 import json
 
 
@@ -47,13 +48,10 @@ def run_unit_tests() -> tuple[bool, int]:
 
 def run_eval_benchmark() -> tuple[bool, int, int]:
     policy_file = root_dir / "data" / "policy.md"
+    amendment_file = root_dir / "data" / "Amendment No. 2026-01.md"
     eval_file = root_dir / "tests" / "evaluation.json"
 
-    with open(policy_file, "r", encoding="utf-8") as f:
-        policy_content = f.read()
-
-    clauses = parse_markdown_policy(policy_content, source_file=str(policy_file))
-    retriever = BM25Retriever(clauses)
+    clauses = load_combined_corpus(policy_file, amendment_file)
     gate = EvidenceGate()
 
     with open(eval_file, "r", encoding="utf-8") as f:
@@ -65,6 +63,10 @@ def run_eval_benchmark() -> tuple[bool, int, int]:
     for case in eval_cases:
         question = case["question"]
         expected = case["expected"]
+        ctx = extract_temporal_context(question)
+        app_clauses = filter_temporally_applicable_clauses(clauses, ctx)
+
+        retriever = BM25Retriever(app_clauses)
         results = retriever.retrieve(question, top_k=5)
         decision = gate.evaluate(question, results)
         actual = normalize_status(decision.status)

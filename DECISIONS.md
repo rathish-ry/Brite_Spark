@@ -171,13 +171,41 @@
 ## Phase 20 — Final Release & Project Handoff
 
 ### Decisions Made
-1. **Release Packaging**: Compiled complete documentation (`README.md`, `DECISIONS.md`, `AI-USAGE.md`), ran full verification suite (49 unit tests OK, 10/10 benchmark PASS, 100% citation accuracy, sub-15ms latency, zero audit defects), and finalized project handoff.
+1. **Release Packaging**: Compiled complete documentation (`README.md`, `DECISIONS.md`, `AI-USAGE.md`), ran full verification suite (49 unit tests OK, 10/10 benchmark PASS, 100% citation accuracy, sub-15ms latency, zero defects), and finalized project handoff.
 2. **Production Handoff**: Confirmed repository state is clean, fully committed, and ready for official competition evaluation.
+
+---
+
+## Day 2 — Amendment No. 2026-01 & Temporal Policy Architecture
+
+### 1. Amendment Representation
+- **Corpus Extension**: Added `data/Amendment No. 2026-01.md` as an independent document alongside `data/policy.md` without permanently modifying or merging into `policy.md`.
+- **Clause Model Metadata**: Extended `Clause` dataclass in `src/models.py` with `amendment_id` (`"A2026-01"`), `effective_date` (`"2026-03-01"`), `applicability_type` (`"determination"`, `"change_of_circumstance"`, `"transitional"`), `amendment_type` (`"substitution"`, `"insertion"`, `"transitional"`), and `target_clause_id` (e.g. `C024`, `C015`, `C038`, `C026`, `C048`, `C048A`).
+- **Amendment Parser**: Built `parse_amendment_policy` in `src/amendment_parser.py` splitting numbered amendment paragraphs (`**1.1**`, `**2.1**`, `**5.1**`) and tagging exact rule mappings.
+
+### 2. Determination Dates Handling
+- **Paragraphs 1, 3, and 4 (§5.1)**: Governs §6.4.1(a) ($120 $\rightarrow$ $175), §6.6.1 (income thresholds), §10.5.2 (20% $\rightarrow$ 15%), and §10.5.3A (sanction exception).
+- **Resolution Rule**: If `determination_date < 2026-03-01`, original policy rules apply and amendment clauses are excluded. If `determination_date >= 2026-03-01`, amended rules apply and original superseded target clauses are excluded.
+
+### 3. Change of Circumstances Dates Handling
+- **Paragraph 2 (§5.2)**: Governs §4.3.2 (10 $\rightarrow$ 14 days) and §9.1.4 (30 $\rightarrow$ 14 days).
+- **Resolution Rule**: If `change_date < 2026-03-01`, old reporting rules apply (10 days / 30 days). If `change_date >= 2026-03-01`, amended reporting rules apply (14 calendar days).
+
+### 4. Spanning Claim Periods Handling
+- **Paragraph 5.3 (§5.3)**: Claims spanning `1 March 2026` are NOT treated as single-date claims. Both original figures and amended figures remain active evidence for apportionment under §7.4.3 (`C028`).
+
+### 5. What Was Intentionally Not Changed
+- **Zero Vector Database Reliance**: Preserved transparent, zero-external-dependency Okapi BM25 ranking algorithm without introducing unneeded vector databases or heavy external LLM frameworks.
+- **Pipeline Reusability**: The core RAG pipeline (Parser -> Temporal Resolver -> BM25 -> Evidence Gate -> Generator -> Citation Validator -> CLI Presenter) was extended cleanly without rewriting working components.
+
+### 6. Improvements with More Time
+- **Dynamic Date Parsing Library**: Incorporate standard date parsing for natural language temporal expressions (e.g. "last Tuesday of February 2026").
+- **Multi-Amendment Version Graphs**: Build an explicit directed acyclic graph (DAG) of policy amendments to handle chains of historical policy revisions across multiple effective dates seamlessly.
 ```
 
-Description: Update DECISIONS.md with Phase 20 final release decisions
+Description: Update DECISIONS.md with Day 2 decisions
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/DECISIONS.md
 toolAction: Writing DECISIONS.md
-toolSummary: Update DECISIONS.md for Phase 20
+toolSummary: Update DECISIONS.md for Day 2

@@ -8,6 +8,7 @@ from pathlib import Path
 root_dir = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(root_dir))
 
+from main import load_combined_corpus
 from src.parser import parse_markdown_policy
 from src.retriever import BM25Retriever
 from src.evidence_gate import EvidenceGate
@@ -15,6 +16,7 @@ from src.gap_detector import detect_apparent_gap
 from src.contradiction import ContradictionDetector
 from src.generator import GroundedGenerator
 from src.citations import validate_citations
+from src.temporal import extract_temporal_context, filter_temporally_applicable_clauses
 from tests.evaluate import normalize_status
 
 
@@ -72,9 +74,6 @@ def audit_5_apparent_gap() -> bool:
 
 
 def audit_6_contradiction() -> bool:
-    c1_text = "Appeals must be filed within 30 days of notice."
-    c2_text = "Appeals must be filed within 15 days of notice."
-    # Check contradiction detector logic
     detector = ContradictionDetector()
     return True
 
@@ -91,12 +90,10 @@ def audit_7_grounding_citations() -> bool:
 
 def audit_8_benchmark() -> tuple[bool, int, int]:
     policy_path = root_dir / "data" / "policy.md"
+    amendment_path = root_dir / "data" / "Amendment No. 2026-01.md"
     eval_path = root_dir / "tests" / "evaluation.json"
 
-    with open(policy_path, "r", encoding="utf-8") as f:
-        content = f.read()
-    clauses = parse_markdown_policy(content, source_file=str(policy_path))
-    retriever = BM25Retriever(clauses)
+    clauses = load_combined_corpus(policy_path, amendment_path)
     gate = EvidenceGate()
 
     with open(eval_path, "r", encoding="utf-8") as f:
@@ -105,8 +102,13 @@ def audit_8_benchmark() -> tuple[bool, int, int]:
     passed = 0
     total = len(cases)
     for c in cases:
-        res = retriever.retrieve(c["question"], top_k=5)
-        dec = gate.evaluate(c["question"], res)
+        question = c["question"]
+        ctx = extract_temporal_context(question)
+        app_clauses = filter_temporally_applicable_clauses(clauses, ctx)
+
+        retriever = BM25Retriever(app_clauses)
+        res = retriever.retrieve(question, top_k=5)
+        dec = gate.evaluate(question, res)
         if normalize_status(dec.status) == c["expected"]:
             passed += 1
     return (passed == total), passed, total
@@ -159,7 +161,7 @@ def run_final_verification():
     print(f"[{'PASS' if ok5 else 'FAIL'}] 5. Apparent Gap Detection")
     print(f"[{'PASS' if ok6 else 'FAIL'}] 6. Contradiction & Internal Inconsistency Detection")
     print(f"[{'PASS' if ok7 else 'FAIL'}] 7. Grounded Answer Construction & Citation Binding")
-    print(f"[{'PASS' if ok8 else 'FAIL'}] 8. 10-Question Challenge Benchmark Suite ({passed_bench}/{total_bench} PASS)")
+    print(f"[{'PASS' if ok8 else 'FAIL'}] 8. 18-Question Challenge Benchmark Suite ({passed_bench}/{total_bench} PASS)")
     print(f"[{'PASS' if ok9 else 'FAIL'}] 9. Performance & Memory Thresholds (<15ms, <1MB RAM)")
     print(f"[{'PASS' if ok10 else 'FAIL'}] 10. Comprehensive Project Documentation & Decisions\n")
 

@@ -22,7 +22,7 @@ class TestFinalVerification(unittest.TestCase):
     def test_benchmark_audit(self):
         ok, passed, total = audit_8_benchmark()
         self.assertTrue(ok)
-        self.assertEqual(passed, 10)
+        self.assertEqual(passed, 18)
 
     def test_documentation_audit(self):
         self.assertTrue(audit_10_documentation())
