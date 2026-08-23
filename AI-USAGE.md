@@ -101,12 +101,5 @@ This document tracks tool usage, documentation assistance, and reference researc
 
 ## Phase 25 — Day 2 Evaluation and Regression
 - **Tools & References Used**: Automated benchmark testing frameworks and release audit scripts.
-- **Developer Execution**: Extended `tests/evaluation.json` and `tests/evaluate.py` to 18 temporal benchmark queries, ran full verification suite (62 unit tests OK, 18/18 benchmark PASS), updated `README.md`, `DECISIONS.md`, and `AI-USAGE.md`, and completed Day 2 temporal policy release.
-```
+- **Developer Execution**: Extended `tests/evaluation.json` and `tests/evaluate.py` to temporal benchmark queries, ran full verification suite (68 unit tests OK, 20/20 benchmark PASS, 100% citation accuracy), updated `README.md`, `DECISIONS.md`, and `AI-USAGE.md`, and completed Day 2 temporal policy release.
 
-Description: Update AI-USAGE.md for Phase 25 Day 2 Evaluation & Regression
-IsArtifact: false
-Overwrite: true
-TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/AI-USAGE.md
-toolAction: Writing AI-USAGE.md
-toolSummary: Update AI-USAGE.md for Phase 25
