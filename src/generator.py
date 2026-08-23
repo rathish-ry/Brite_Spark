@@ -61,7 +61,13 @@ class GroundedGenerator:
     def __init__(self):
         self.llm_generator = GroqGroundedGenerator()
 
-    def generate(self, question: str, approved_clauses: List[Clause], full_corpus: Optional[List[Clause]] = None) -> GroundedAnswer:
+    def generate(
+        self,
+        question: str,
+        approved_clauses: List[Clause],
+        full_corpus: Optional[List[Clause]] = None,
+        mode: str = "auto",
+    ) -> GroundedAnswer:
         """
         Generates a grounded answer with clause citations and verifiable sources block.
         Cites both the rule clause and transitional applicability clause when answering amendment queries.
@@ -78,7 +84,6 @@ class GroundedGenerator:
         final_clauses: List[Clause] = list(approved_clauses)
         corpus_to_search = full_corpus or approved_clauses
 
-        # Attach relevant transitional provision clauses for amendment rules
         for clause in list(approved_clauses):
             if clause.amendment_id and clause.applicability_type in ("determination", "change_of_circumstance"):
                 trans_clause = find_transitional_clause(clause, corpus_to_search)
@@ -86,7 +91,7 @@ class GroundedGenerator:
                     final_clauses.append(trans_clause)
 
         ctx = extract_temporal_context(question)
-        llm_res: LLMAnswerResult = self.llm_generator.generate_llm_answer(question, final_clauses, ctx)
+        llm_res: LLMAnswerResult = self.llm_generator.generate_llm_answer(question, final_clauses, ctx, mode=mode)
 
         full_answer_text = llm_res.answer
 

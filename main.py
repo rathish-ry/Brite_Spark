@@ -71,6 +71,14 @@ def main():
         help="Launch interactive caseworker CLI session",
     )
     parser.add_argument(
+        "--mode",
+        "-m",
+        type=str,
+        choices=["offline", "llm", "auto"],
+        default="auto",
+        help="Answer synthesis engine mode: 'offline' (deterministic rule engine), 'llm' (Groq synthesis with automatic offline fallback), or 'auto' (default: auto)",
+    )
+    parser.add_argument(
         "--top-k",
         type=int,
         default=5,
@@ -97,10 +105,10 @@ def main():
         if not found:
             sys.exit(1)
     elif args.query:
-        output = run_grounded_assistant(args.query, clauses, top_k=args.top_k)
+        output = run_grounded_assistant(args.query, clauses, top_k=args.top_k, mode=args.mode)
         print(output)
     else:
-        run_interactive_session(clauses, policy_path=str(policy_path))
+        run_interactive_session(clauses, policy_path=str(policy_path), initial_mode=args.mode)
 
 
 if __name__ == "__main__":

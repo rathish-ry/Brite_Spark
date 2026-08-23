@@ -51,7 +51,7 @@ def show_clause(clauses: List[Clause], clause_id: str) -> bool:
     return True
 
 
-def run_grounded_assistant(query: str, clauses: List[Clause], top_k: int = 5) -> str:
+def run_grounded_assistant(query: str, clauses: List[Clause], top_k: int = 5, mode: str = "auto") -> str:
     """
     Executes the end-to-end grounded assistant pipeline:
     Question -> Extract Temporal Context -> Filter Applicable Policy -> BM25 Retriever -> Evidence Gate -> Generator -> CLI Output.
@@ -75,5 +75,5 @@ def run_grounded_assistant(query: str, clauses: List[Clause], top_k: int = 5) ->
         return refusal.format_cli()
 
     generator = GroundedGenerator()
-    answer = generator.generate(query, decision.supported_clauses, full_corpus=clauses)
+    answer = generator.generate(query, decision.supported_clauses, full_corpus=clauses, mode=mode)
     return answer.format_cli()

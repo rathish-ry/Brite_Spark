@@ -69,10 +69,12 @@ class GroqGroundedGenerator:
         question: str,
         approved_clauses: List[Clause],
         temporal_context: Optional[TemporalContext] = None,
+        mode: str = "auto",
     ) -> LLMAnswerResult:
         """
-        Calls Groq API to synthesize a grounded natural language answer from approved evidence.
-        Falls back gracefully to deterministic rule-synthesis if API key is missing or call fails.
+        Synthesizes a grounded answer from approved evidence.
+        - mode='offline': Uses local deterministic engine exclusively (no API calls).
+        - mode='llm' / 'auto': Attempts Groq API synthesis, falling back to offline engine on failure.
         """
         if not approved_clauses:
             return LLMAnswerResult(
@@ -85,7 +87,7 @@ class GroqGroundedGenerator:
         ctx = temporal_context or extract_temporal_context(question)
         valid_ids: Set[str] = {c.id for c in approved_clauses}
 
-        if self._client and self.api_key:
+        if mode.lower() != "offline" and self._client and self.api_key:
             try:
                 evidence_prompt_blocks = []
                 for c in approved_clauses:
