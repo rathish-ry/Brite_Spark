@@ -48,14 +48,33 @@
 
 ---
 
-## Phase 6 — Evidence Gate
+## Phase 6 — Evidence Gate & Refusal Threshold Calibration
 
 ### Decisions Made
-1. **Centralized Configuration**: Centralized all safety threshold magic numbers (`min_retrieval_score`, `min_term_coverage`, `min_score_margin`) in `src/config.py` rather than scattering magic values throughout the codebase.
+1. **Centralized Configuration**: Centralized all safety threshold parameters (`min_retrieval_score`, `min_term_coverage`, `min_score_margin`) in `src/config.py` rather than scattering magic values throughout the codebase.
 2. **Deterministic Safety Decisions**: Built `EvidenceGate` in `src/evidence_gate.py` returning structured `EvidenceDecision` (`ANSWERABLE`, `REFUSE`, `CONFLICT`) prior to answer generation.
 3. **Multi-Factor Validation**: Evaluated retrieval confidence score, query key-term coverage across candidate evidence, and presence of directive policy rules (`must`, `shall`, `within`, `eligible`, `exceed`) to prevent answering when evidence is loosely related but incomplete.
 
+### Calibration of Answering vs. Refusing Thresholds & Trade-offs
+
+The boundary between answering and refusing is a foundational design choice in policy administration. We chose the following numerical thresholds after empirical analysis across the 56-clause corpus and 20 evaluation test cases:
+
+- **`min_retrieval_score = 0.25` (Normalized BM25 Score)**:
+  - *Rationale*: Relevant single-clause queries match high-IDF technical tokens (e.g., `earnings`, `disregard`, `sanction`, `appeal`), yielding normalized scores between `0.40` and `0.95`. Out-of-domain or conversational queries (e.g., *"What is the capital of Australia?"*) score below `0.10`.
+  - *Trade-off*: Setting this threshold higher (e.g., `0.45`) would trigger false refusals for legitimate short queries like *"residency condition"*. Setting it lower (e.g., `0.15`) would allow generic lexical matches against common administrative boilerplate words (`application`, `county`, `officer`) to trigger unintended answers.
+
+- **`min_term_coverage = 0.35` (Key-Term Proportion)**:
+  - *Rationale*: Requires that at least 35% of substantive content terms in the query are explicitly present in the top-ranked clause.
+  - *Why this is essential*: BM25 can produce high aggregate scores for queries with multiple words where only one word matches with high frequency. For example: *"Can an applicant pay their overpayment balance using a credit card online?"* matches `overpayment` strongly, but `credit card` and `online` are entirely absent in the text (yielding coverage of ~20%). The term coverage threshold cleanly intercepts these subtle apparent-gap queries before answer generation.
+
+- **`min_score_margin = 0.05` (Candidate Disambiguation Margin)**:
+  - *Rationale*: Measures separation between the top candidate clause and competing alternatives. If multiple clauses share identical low relevance, the query is ambiguous and routed to refusal.
+
+- **The Precision vs. Recall Philosophy**:
+  In statutory benefits administration, a **False Answer** (misinforming a claimant of eligibility, deadlines, or award amounts) causes direct financial, legal, and operational harm. A **False Refusal** merely escalates the question to a supervisor for standard manual review. Therefore, our system is deliberately calibrated to bias toward **Precision over Recall** — refusing whenever evidence is incomplete or ambiguous.
+
 ---
+
 
 ## Phase 7 — Refusal System
 

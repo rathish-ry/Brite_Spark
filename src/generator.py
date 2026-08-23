@@ -16,8 +16,10 @@ class GroundedAnswer:
     sources_text: str
     cited_clause_ids: List[str]
     status: str = "ANSWERED"
+    used_llm: bool = False  # True when Groq API synthesized the answer
 
     def format_cli(self) -> str:
+        mode_badge = "[Groq LLM]" if self.used_llm else "[Offline]"
         return (
             "========================================\n"
             "       GROUNDED POLICY ASSISTANT        \n"
@@ -27,7 +29,7 @@ class GroundedAnswer:
             f"{self.answer_text}\n\n"
             "SOURCES\n\n"
             f"{self.sources_text}\n\n"
-            f"STATUS: {self.status}"
+            f"STATUS: {self.status} {mode_badge}"
         )
 
 
@@ -104,4 +106,5 @@ class GroundedGenerator:
             sources_text=sources_block,
             cited_clause_ids=val_res.cited_ids,
             status="ANSWERED",
+            used_llm=llm_res.used_llm,
         )

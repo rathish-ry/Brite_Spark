@@ -169,7 +169,7 @@ def run_final_verification():
     print(f"[{'PASS' if ok5 else 'FAIL'}] 5. Apparent Gap Detection")
     print(f"[{'PASS' if ok6 else 'FAIL'}] 6. Contradiction & Internal Inconsistency Detection")
     print(f"[{'PASS' if ok7 else 'FAIL'}] 7. Grounded Answer Construction & Citation Binding")
-    print(f"[{'PASS' if ok8 else 'FAIL'}] 8. 18-Question Challenge Benchmark Suite ({passed_bench}/{total_bench} PASS)")
+    print(f"[{'PASS' if ok8 else 'FAIL'}] 8. {total_bench}-Question Challenge Benchmark Suite ({passed_bench}/{total_bench} PASS)")
     print(f"[{'PASS' if ok9 else 'FAIL'}] 9. Performance & Memory Thresholds (<15ms, <1MB RAM)")
     print(f"[{'PASS' if ok10 else 'FAIL'}] 10. Comprehensive Project Documentation & Decisions\n")
 

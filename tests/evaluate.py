@@ -63,11 +63,12 @@ def run_evaluation(
     with open(eval_file, "r", encoding="utf-8") as f:
         eval_cases = json.load(f)
 
+    total = len(eval_cases)
+    print(f"Brite Spark Evaluation Benchmark Suite — {total} Questions\n")
+
     passed_count = 0
     failed_count = 0
     failures = []
-
-    print("Brite Spark Phase 26 Groq Evaluation Benchmark Suite\n")
 
     for case in eval_cases:
         case_id = case["id"]

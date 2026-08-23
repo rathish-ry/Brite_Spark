@@ -22,6 +22,7 @@ class LLMAnswerResult:
     answer: str
     reason: str
     citation_ids: List[str]
+    used_llm: bool = False  # True when Groq API was used, False for deterministic fallback
 
 
 SYSTEM_PROMPT = """You are an expert, strict policy assistant. Your job is to convert the supplied, pre-approved policy evidence into a clear, concise, direct natural-language answer.
@@ -137,6 +138,7 @@ class GroqGroundedGenerator:
                         answer=answer,
                         reason=reason,
                         citation_ids=citation_ids or list(valid_ids),
+                        used_llm=True,
                     )
             except Exception as err:
                 # Log or fallback gracefully if API call fails

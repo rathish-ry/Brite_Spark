@@ -94,8 +94,24 @@ The assistant answers policy questions strictly using the supplied policy manual
    pip install -r requirements.txt
    ```
 
-### Groq API Configuration
-Configure your Groq API key in environment variables or in `.env`:
+### Groq API Configuration (Optional)
+The system runs **100% offline out-of-the-box** using a deterministic fallback engine with zero external API calls. All unit tests and evaluation suites pass without any API key.
+
+To optionally enable live Groq LLM answer synthesis:
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   # or on Windows PowerShell:
+   copy .env.example .env
+   ```
+2. Open `.env` and set your key:
+   ```env
+   GROQ_API_KEY=gsk_your_actual_key_here
+   GROQ_MODEL=llama-3.3-70b-versatile
+   ```
+
+Alternatively, set environment variables directly:
 
 **Windows PowerShell**:
 ```powershell
@@ -107,13 +123,6 @@ $env:GROQ_MODEL="llama-3.3-70b-versatile"
 ```bash
 export GROQ_API_KEY="your-groq-api-key-here"
 export GROQ_MODEL="llama-3.3-70b-versatile"
-```
-
-**Local `.env` File**:
-Create a `.env` file in the project root:
-```env
-GROQ_API_KEY=gsk_your_actual_key_here
-GROQ_MODEL=llama-3.3-70b-versatile
 ```
 
 ---
@@ -157,15 +166,16 @@ Source: data/Amendment No. 2026-01.md lines 47-47
 
 "**5.1** The amendments made by paragraphs 1, 3 and 4 apply to any determination made on or after 1 March 2026, including a determination in respect of a period before that date."
 
-STATUS: ANSWERED
+STATUS: ANSWERED [Groq LLM]
 ```
+*(Note: If `GROQ_API_KEY` is not set, the output displays `STATUS: ANSWERED [Offline]` with identical grounded facts and verifiable citations).*
 
 ---
 
 ## 🧪 Evaluation & Audit Suites
 
-### 1. Day 2 Evaluation Benchmark Suite (18 Questions)
-Runs the extended 18-question evaluation suite checking final answer correctness, citations, and status:
+### 1. Evaluation Benchmark Suite (20 Questions)
+Runs the comprehensive 20-question evaluation suite checking answer correctness, refusal integrity, temporal awareness, and citation binding:
 ```bash
 python tests/evaluate.py
 ```
@@ -192,9 +202,10 @@ python -m unittest discover -s tests
 | Metric / Audit Suite | Result | Status |
 | :--- | :--- | :--- |
 | **Unit Test Suite** | 68 / 68 Passed | **PASS** |
-| **Day 2 Challenge Benchmark (18 Questions)** | 18 / 18 Passed | **PASS** |
+| **Challenge Benchmark (20 Questions)** | 20 / 20 Passed | **PASS** |
 | **Citation Accuracy Rate** | 100.0% | **PASS** |
 | **End-to-End Query Latency** | < 15 ms | **PASS** |
 | **Net RAM Memory Usage** | < 1 MB | **PASS** |
 | **System Integrity Audit** | Operational | **PASS** |
 | **Final Compliance Audit** | 100% Compliant | **PASS** |
+

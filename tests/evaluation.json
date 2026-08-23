@@ -119,5 +119,17 @@
     "expected": "ANSWERED",
     "expected_answer_contains": "resident",
     "type": "day1_regression"
+  },
+  {
+    "id": 19,
+    "question": "Can an applicant access or download their case file documents through an online portal?",
+    "expected": "REFUSED",
+    "type": "apparent-gap-digital-access"
+  },
+  {
+    "id": 20,
+    "question": "What is the exact dollar penalty amount for a household of 3 earning $900 per month under a 15 percent sanction for a determination made on 5 April 2026?",
+    "expected": "REFUSED",
+    "type": "apparent-gap-computation"
   }
 ]
