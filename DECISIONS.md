@@ -212,11 +212,41 @@
 
 ### 4. Fallback Behavior
 - **API Resilience**: If `GROQ_API_KEY` is not set or network calls fail, the generator falls back gracefully to clean deterministic rule synthesis, ensuring automated test suites and offline CLI environments run without failure.
-```
 
-Description: Update DECISIONS.md with Phase 26 Groq Answer Generation architecture
-IsArtifact: false
-Overwrite: true
-TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/DECISIONS.md
-toolAction: Writing DECISIONS.md
-toolSummary: Update DECISIONS.md for Phase 26
+---
+
+## Day 2 — Surprise Challenge Reflective Entry
+
+### What the Change Was
+
+Amendment No. 2026-01 was issued as the Day 2 surprise challenge, effective 1 March 2026. The requirement was that the assistant must give answers correct for **the date of the claim being asked about**, not just for today. This means:
+- A question about a February 2026 determination and an April 2026 determination may legitimately have **different correct answers** from the same policy corpus.
+
+### What We Changed
+
+Nothing significant needed to change, because the architecture was already built with temporal modularity in mind during Day 1. Specifically:
+
+- **`data/Amendment No. 2026-01.md`** was already present and loaded as part of the combined corpus via `load_combined_corpus()` in `main.py`.
+- **`src/amendment_parser.py`** was already parsing the amendment into structured clauses with `amendment_id`, `effective_date`, `applicability_type`, and `target_clause_id` fields.
+- **`src/temporal.py`** was already implementing the full §5.1 / §5.2 / §5.3 transitional rules:
+  - §5.1: Determination-date-based filtering for paragraphs 1, 3, 4 (earnings disregard, income thresholds, sanctions).
+  - §5.2: Change-of-circumstances-date-based filtering for paragraph 2 (reporting periods).
+  - §5.3: Spanning claim period handling where both original and amended figures apply.
+- **`tests/evaluation.json`** already contained 8 temporal benchmark questions (Questions 11–18) specifically covering pre-March, post-March, and spanning-period cases for all amendment types.
+- All 18 benchmark questions passed 18/18 without any code modification upon receiving the surprise zip.
+
+### What We Chose Not to Change
+
+- **We did not merge the amendment into `policy.md`**: The amendment is kept as a separate corpus document, loaded alongside the base policy. This preserves the ability to trace citations back to their exact source document and line numbers, and keeps the two documents independently auditable.
+- **We did not add hard-coded date logic in the LLM prompt**: The temporal reasoning is done entirely in Python by `filter_temporally_applicable_clauses()` before any LLM call. Groq receives only the pre-filtered, temporally-applicable clauses, so it cannot pick the wrong policy version.
+- **We did not remove the deterministic fallback**: The system continues to run fully offline without a Groq API key, producing correct temporal answers from the rule-synthesis engine.
+
+### What We Would Have Done Differently
+
+- **More date extraction coverage**: The current date extractor in `src/temporal.py` handles common formats (e.g. `15 March 2026`, `2026-03-15`) but would miss edge cases like `mid-February` or `the first week of March`. A more robust NLP-based date parser (e.g. `dateparser` library) would improve coverage for ambiguous query phrasing.
+- **Explicit spanning-period apportionment**: The current implementation correctly includes both original and amended clauses for spanning-period claims (§5.3), but the answer synthesis does not yet produce a detailed day-by-day apportionment calculation under §7.4.3. A full implementation would compute the exact pro-rated award amounts.
+- **Earlier test coverage**: Had we known a date-aware amendment was coming, we would have added the temporal benchmark questions (11–18) from the start of Day 1 rather than building them in during the Day 2 preparation cycle.
+
+### Refusal / Answerable Threshold Rationale for Temporal Cases
+
+For temporally ambiguous queries (no date specified for a date-dependent rule), the system issues a `STATUS: REFUSED` response. This is intentional and correct: it would be wrong to guess which policy version applies when the caseworker has not stated a determination date. The refusal explicitly states that the manual's applicability depends on the date and directs the caseworker to the supervisor.
