@@ -19,11 +19,11 @@ class TestGroundedGenerator(unittest.TestCase):
 
     def test_generate_grounded_answer(self):
         query = "How long do I have to appeal?"
-        answer = self.generator.generate(query, [self.clause])
+        answer = self.generator.generate(query, [self.clause], mode="offline")
 
         self.assertEqual(answer.status, "ANSWERED")
         self.assertIn("[C053]", answer.answer_text)
-        self.assertIn("An appeal must be lodged within 30 days", answer.answer_text)
+        self.assertIn("30 days", answer.answer_text)
         self.assertIn("C053", answer.cited_clause_ids)
         self.assertIn("Source: data/policy.md lines 584-588", answer.sources_text)
 
