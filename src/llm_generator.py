@@ -9,7 +9,6 @@ from src.models import Clause
 from src.temporal import TemporalContext, extract_temporal_context
 from src.citations import validate_citations, format_sources_block
 
-# Load environment variables from .env file
 load_dotenv()
 
 
@@ -18,11 +17,11 @@ class LLMAnswerResult:
     """
     Structured outcome returned by the Groq LLM answer generator.
     """
-    status: str  # "answered", "refused", "conflict"
+    status: str
     answer: str
     reason: str
     citation_ids: List[str]
-    used_llm: bool = False  # True when Groq API was used, False for deterministic fallback
+    used_llm: bool = False
 
 
 SYSTEM_PROMPT = """You are an expert, strict policy assistant. Your job is to convert the supplied, pre-approved policy evidence into a clear, concise, direct natural-language answer.
@@ -62,7 +61,7 @@ class GroqGroundedGenerator:
             try:
                 from groq import Groq
                 self._client = Groq(api_key=self.api_key)
-            except Exception as e:
+            except Exception:
                 self._client = None
 
     def generate_llm_answer(
@@ -86,7 +85,6 @@ class GroqGroundedGenerator:
         ctx = temporal_context or extract_temporal_context(question)
         valid_ids: Set[str] = {c.id for c in approved_clauses}
 
-        # Try Groq API execution if client is configured
         if self._client and self.api_key:
             try:
                 evidence_prompt_blocks = []
@@ -140,11 +138,9 @@ class GroqGroundedGenerator:
                         citation_ids=citation_ids or list(valid_ids),
                         used_llm=True,
                     )
-            except Exception as err:
-                # Log or fallback gracefully if API call fails
+            except Exception:
                 pass
 
-        # Deterministic Fallback Synthesis (for offline test environments or missing API key)
         return self._deterministic_fallback_synthesis(question, approved_clauses, ctx)
 
     def _deterministic_fallback_synthesis(
@@ -159,7 +155,6 @@ class GroqGroundedGenerator:
         cit_tags = " ".join([f"[{c.id}]" for c in approved_clauses])
         q_lower = question.lower()
 
-        # Synthesis for Disregard queries
         if "disregard" in q_lower or "earnings" in q_lower:
             if ctx.determination_date:
                 if ctx.determination_date >= "2026-03-01":
@@ -169,7 +164,6 @@ class GroqGroundedGenerator:
                     ans = f"The earnings disregard was $120 per month. The determination was made on {ctx.determination_date}, which is before 1 March 2026, so the original rule applies. {cit_tags}"
                     return LLMAnswerResult(status="answered", answer=ans, reason="Original determination rule applies", citation_ids=[c.id for c in approved_clauses])
 
-        # Synthesis for Reporting Period queries
         if "report" in q_lower or "change" in q_lower or "how long" in q_lower:
             if ctx.change_date:
                 if ctx.change_date >= "2026-03-01":
@@ -179,7 +173,6 @@ class GroqGroundedGenerator:
                     ans = f"The reporting period is 10 calendar days under §4.3.2 for changes occurring before 1 March 2026. {cit_tags}"
                     return LLMAnswerResult(status="answered", answer=ans, reason="Original reporting rule applies", citation_ids=[c.id for c in approved_clauses])
 
-        # Default clean synthesis
         clause_summaries = []
         for c in approved_clauses:
             text_clean = re.sub(r"\s+", " ", c.text).strip()

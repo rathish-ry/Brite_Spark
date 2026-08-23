@@ -30,7 +30,6 @@ def normalize_status(status_enum) -> str:
     return "REFUSED"
 
 
-
 def check_required_artifacts() -> bool:
     required = [
         root_dir / "data" / "policy.md",
