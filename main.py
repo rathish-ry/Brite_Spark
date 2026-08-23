@@ -8,6 +8,9 @@ from src.amendment_parser import parse_amendment_policy
 from src.cli import list_clauses, show_clause, run_grounded_assistant
 from src.interactive import run_interactive_session
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 
 def load_combined_corpus(
     policy_path: Path = Path("data/policy.md"),

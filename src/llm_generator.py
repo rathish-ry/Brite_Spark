@@ -129,6 +129,7 @@ class GroqGroundedGenerator:
 
                 status = data.get("status", "answered").lower()
                 answer = data.get("answer", "").strip()
+                answer = re.sub(r"[\u2000-\u206F\u00A0\uFEFF]", " ", answer).strip()
                 reason = data.get("reason", "").strip()
                 citation_ids = [cid.strip() for cid in data.get("citation_ids", []) if cid.strip() in valid_ids]
 
