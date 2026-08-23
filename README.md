@@ -108,7 +108,7 @@ To optionally enable live Groq LLM answer synthesis:
 2. Open `.env` and set your key:
    ```env
    GROQ_API_KEY=gsk_your_actual_key_here
-   GROQ_MODEL=llama-3.3-70b-versatile
+   GROQ_MODEL=openai/gpt-oss-120b
    ```
 
 Alternatively, set environment variables directly:
@@ -116,13 +116,13 @@ Alternatively, set environment variables directly:
 **Windows PowerShell**:
 ```powershell
 $env:GROQ_API_KEY="your-groq-api-key-here"
-$env:GROQ_MODEL="llama-3.3-70b-versatile"
+$env:GROQ_MODEL="openai/gpt-oss-120b"
 ```
 
 **Linux / macOS**:
 ```bash
 export GROQ_API_KEY="your-groq-api-key-here"
-export GROQ_MODEL="llama-3.3-70b-versatile"
+export GROQ_MODEL="openai/gpt-oss-120b"
 ```
 
 ---
