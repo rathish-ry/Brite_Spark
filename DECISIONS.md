@@ -194,18 +194,29 @@
 ### 4. Spanning Claim Periods Handling
 - **Paragraph 5.3 (§5.3)**: Claims spanning `1 March 2026` are NOT treated as single-date claims. Both original figures and amended figures remain active evidence for apportionment under §7.4.3 (`C028`).
 
-### 5. What Was Intentionally Not Changed
-- **Zero Vector Database Reliance**: Preserved transparent, zero-external-dependency Okapi BM25 ranking algorithm without introducing unneeded vector databases or heavy external LLM frameworks.
-- **Pipeline Reusability**: The core RAG pipeline (Parser -> Temporal Resolver -> BM25 -> Evidence Gate -> Generator -> Citation Validator -> CLI Presenter) was extended cleanly without rewriting working components.
+---
 
-### 6. Improvements with More Time
-- **Dynamic Date Parsing Library**: Incorporate standard date parsing for natural language temporal expressions (e.g. "last Tuesday of February 2026").
-- **Multi-Amendment Version Graphs**: Build an explicit directed acyclic graph (DAG) of policy amendments to handle chains of historical policy revisions across multiple effective dates seamlessly.
+## Phase 26 — Groq Answer Generation Architecture
+
+### 1. Why Groq Was Added
+- **Natural Language Answer Synthesis**: Upstream logic extracts exact evidence clauses, but caseworkers require clear, concise, fluent answers rather than raw clause headings verbatim.
+- **Strict Evidence Formatting**: Replaces direct string concatenation with Groq LLM synthesis while maintaining verifiable clause citations and distinct `SOURCES` blocks.
+
+### 2. Separation of Pipeline Concerns
+- **Retrieval & Safety First**: Groq is called ONLY AFTER upstream application logic parses Markdown, extracts temporal context, filters applicable clauses, runs BM25 retrieval, and passes Evidence Gate validation.
+- **Deterministic Refusals**: If Evidence Gate identifies insufficient evidence, an apparent gap, or an internal policy contradiction, the system returns immediate deterministic refusals (`STATUS: REFUSED` or `STATUS: REFUSED_CONFLICT`) without invoking Groq.
+- **Application-Driven Temporal Logic**: Groq does NOT independently evaluate determination dates, change dates, or policy versions. Temporal context and applicability are pre-computed in Python.
+
+### 3. Post-Generation Citation Validation
+- **Strict Verification**: Citations returned by Groq are verified against the approved evidence set using `validate_citations`. Uncited claims or invalid citation IDs are caught and corrected before display.
+
+### 4. Fallback Behavior
+- **API Resilience**: If `GROQ_API_KEY` is not set or network calls fail, the generator falls back gracefully to clean deterministic rule synthesis, ensuring automated test suites and offline CLI environments run without failure.
 ```
 
-Description: Update DECISIONS.md with Day 2 decisions
+Description: Update DECISIONS.md with Phase 26 Groq Answer Generation architecture
 IsArtifact: false
 Overwrite: true
 TargetFile: d:/VS_CODE_PROJECTS/Brite_Spark/DECISIONS.md
 toolAction: Writing DECISIONS.md
-toolSummary: Update DECISIONS.md for Day 2
+toolSummary: Update DECISIONS.md for Phase 26

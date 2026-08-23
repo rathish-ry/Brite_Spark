@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import List, Dict, Set
 from src.models import Clause
 
-# Standard English stop words to filter out uninformative terms during retrieval
+# Standard English stop words (excluding domain keywords like 'under')
 STOP_WORDS: Set[str] = {
     "a", "about", "above", "after", "again", "against", "all", "am", "an", "and",
     "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being",
@@ -16,7 +16,7 @@ STOP_WORDS: Set[str] = {
     "of", "off", "on", "once", "only", "or", "other", "our", "ours", "ourselves",
     "out", "over", "own", "same", "she", "should", "so", "some", "such", "than",
     "that", "the", "their", "theirs", "them", "themselves", "then", "there", "these",
-    "they", "this", "those", "through", "to", "too", "under", "until", "up", "very",
+    "they", "this", "those", "through", "to", "too", "until", "up", "very",
     "was", "we", "were", "what", "when", "where", "which", "while", "who", "whom",
     "why", "with", "would", "you", "your", "yours", "yourself", "yourselves"
 }
@@ -27,10 +27,11 @@ def simple_stem(word: str) -> str:
     Applies a lightweight, deterministic suffix stemming rule to improve word matching.
     """
     word = word.lower()
-    if len(word) <= 3:
+    if word in ("percentage", "percentages", "percent"):
+        return "percent"
+    if len(word) <= 3 or word.isdigit():
         return word
-    
-    # Common suffix stemming
+
     suffixes = ["ing", "edly", "able", "ment", "ness", "s", "ed", "es", "ly"]
     for suf in suffixes:
         if word.endswith(suf) and len(word) - len(suf) >= 3:
@@ -40,13 +41,15 @@ def simple_stem(word: str) -> str:
 
 def tokenize(text: str) -> List[str]:
     """
-    Tokenizes input text into normalized, stemmed term tokens.
+    Tokenizes input text into normalized, stemmed term tokens. Includes numeric digits.
+    Normalizes 'per cent' to 'percent'.
     """
-    words = re.findall(r"\b\w+\b", text.lower())
+    text_norm = re.sub(r"\bper\s+cent\b", "percent", text.lower())
+    words = re.findall(r"\b\w+\b", text_norm)
     tokens = [
         simple_stem(w)
         for w in words
-        if w not in STOP_WORDS and not w.isdigit() and len(w) > 1
+        if w not in STOP_WORDS and len(w) > 0
     ]
     return tokens
 
@@ -87,25 +90,28 @@ class BM25Retriever:
     def _index(self) -> None:
         N = len(self.clauses)
         total_len = 0
+        clause_map = {c.id: c for c in self.clauses}
 
         for clause in self.clauses:
-            # Weight heading and section words slightly higher by prepending them
-            text_to_index = f"{clause.section} {clause.heading} {clause.heading} {clause.text}"
+            target_text = ""
+            if clause.target_clause_id and clause.target_clause_id in clause_map:
+                tc = clause_map[clause.target_clause_id]
+                target_text = f"{tc.section} {tc.heading} {tc.text}"
+
+            text_to_index = f"{clause.section} {clause.heading} {target_text} {clause.text}"
             tokens = tokenize(text_to_index)
-            
+
             self.doc_tokens.append(tokens)
             doc_len = len(tokens)
             self.doc_lengths.append(doc_len)
             total_len += doc_len
 
-            # Track unique term document frequencies
             unique_terms = set(tokens)
             for term in unique_terms:
                 self.doc_freqs[term] = self.doc_freqs.get(term, 0) + 1
 
         self.avg_doc_len = total_len / N if N > 0 else 1.0
 
-        # Precompute Lucene/Okapi BM25 IDF scores
         for term, df in self.doc_freqs.items():
             self.idf[term] = math.log(1.0 + (N - df + 0.5) / (df + 0.5))
 
@@ -138,7 +144,6 @@ class BM25Retriever:
                     denominator = tf + self.k1 * (1.0 - self.b + self.b * (doc_len / self.avg_doc_len))
                     raw_scores[idx] += token_idf * (numerator / denominator)
 
-        # Collect non-zero matching clauses
         query_max_idf = sum(self.idf[t] for t in set(query_tokens) if t in self.idf)
         if query_max_idf <= 0:
             return []
@@ -146,7 +151,6 @@ class BM25Retriever:
         results: List[RetrievalResult] = []
         for idx, raw_score in enumerate(raw_scores):
             if raw_score > 0:
-                # Normalize raw BM25 score against maximum possible query IDF sum
                 norm_score = min(1.0, raw_score / query_max_idf)
                 results.append(
                     RetrievalResult(
@@ -156,6 +160,5 @@ class BM25Retriever:
                     )
                 )
 
-        # Sort descending by score
         results.sort(key=lambda r: r.score, reverse=True)
         return results[:top_k]

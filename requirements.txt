@@ -1,2 +1,3 @@
 # Core dependencies for Brite Spark Grounded Answer Policy Assistant
-# Phase 1 relies strictly on Python Standard Library to ensure zero extra setup overhead.
+groq>=0.9.0
+python-dotenv>=1.0.0

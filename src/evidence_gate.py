@@ -55,7 +55,7 @@ class EvidenceGate:
 
         eval_clauses = [res.clause for res in retrieved_results[: self.config.top_k_eval]]
         combined_evidence_text = " ".join([f"{c.heading} {c.text}" for c in eval_clauses])
-        
+
         term_coverage = calculate_term_coverage(query_tokens, combined_evidence_text)
 
         # 1. Retrieval Score Threshold Check
@@ -110,11 +110,16 @@ class EvidenceGate:
                 term_coverage=term_coverage,
             )
 
-        # 6. Sufficient Evidence
+        # Collect top supported clauses matching score threshold
+        supported = [top_result.clause]
+        for res in retrieved_results[1: self.config.top_k_eval]:
+            if res.score >= top_score * 0.7 and res.clause.id not in [c.id for c in supported]:
+                supported.append(res.clause)
+
         return EvidenceDecision(
             status=EvidenceStatus.ANSWERABLE,
             reason="Sufficient grounding evidence identified with high confidence and query coverage.",
-            supported_clauses=[top_result.clause],
+            supported_clauses=supported,
             top_score=top_score,
             term_coverage=term_coverage,
         )

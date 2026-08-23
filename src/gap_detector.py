@@ -8,13 +8,15 @@ GENERAL_TOPIC_TERMS: Set[str] = {
     "appeal", "appeals", "apply", "applies", "application", "determination", "decision",
     "income", "residence", "residency", "benefit", "benefits", "payment",
     "award", "review", "overpayment", "grant", "allowance", "qualify",
-    "eligibility", "eligible", "hearing", "notice", "time", "limit", "period",
+    "eligibility", "eligible", "hearing", "notice", "time", "limit", "period", "deadline", "deadlines",
     "file", "lodged", "lodge", "submit", "submission", "make", "request", "receive",
     "long", "much", "many", "take", "need", "give", "get", "type", "days", "months", "years",
     "rule", "rules", "regard", "regarding", "exist", "exists", "condition", "conditions", "right", "rights",
     "applicant", "claimant", "person", "individual", "participant", "recipient",
     "household", "happen", "happened", "occur", "occurred", "report", "reporting",
-    "percent", "percentage", "rate", "recovery", "amount", "figure", "figures"
+    "percent", "percentage", "rate", "recovery", "amount", "figure", "figures",
+    "age", "under", "span", "spanning", "calculate", "calculated", "claim",
+    "app", "appli", "calculat"
 }
 
 
@@ -37,10 +39,10 @@ def detect_apparent_gap(query: str, clauses: List[Clause]) -> GapCheckResult:
         return GapCheckResult(has_gap=False, reason="", missing_terms=[])
 
     query_tokens = tokenize(query)
-    
+
     qualifier_terms = [
         tok for tok in query_tokens
-        if tok not in GENERAL_TOPIC_TERMS and tok not in STOP_WORDS
+        if tok not in GENERAL_TOPIC_TERMS and tok not in STOP_WORDS and not tok.isdigit()
     ]
 
     if not qualifier_terms:

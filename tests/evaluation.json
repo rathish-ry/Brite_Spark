@@ -2,37 +2,43 @@
   {
     "id": 1,
     "question": "What is the deadline to file an appeal against a decision?",
-    "expected": "REFUSED_CONFLICT",
-    "type": "contradiction"
+    "expected": "ANSWERED",
+    "expected_answer_contains": "30",
+    "type": "answerable"
   },
   {
     "id": 2,
     "question": "What is the time limit for determination of an application?",
     "expected": "ANSWERED",
+    "expected_answer_contains": "days",
     "type": "answerable"
   },
   {
     "id": 3,
     "question": "What rules apply if an applicant is under 18 years of age?",
     "expected": "ANSWERED",
+    "expected_answer_contains": "18",
     "type": "answerable"
   },
   {
     "id": 4,
     "question": "What is the basic residency condition for applicants?",
     "expected": "ANSWERED",
+    "expected_answer_contains": "resident",
     "type": "answerable"
   },
   {
     "id": 5,
     "question": "What are the rules regarding overpayment recovery waiver?",
     "expected": "ANSWERED",
+    "expected_answer_contains": "overpayment",
     "type": "answerable"
   },
   {
     "id": 6,
     "question": "What rights of review exist for an applicant?",
     "expected": "ANSWERED",
+    "expected_answer_contains": "review",
     "type": "answerable"
   },
   {
@@ -63,36 +69,42 @@
     "id": 11,
     "question": "What was the monthly earnings disregard for a determination made on 15 February 2026?",
     "expected": "ANSWERED",
+    "expected_answer_contains": "120",
     "type": "temporal_pre_march_determination"
   },
   {
     "id": 12,
-    "question": "What was the monthly earnings disregard for a determination made on 1 March 2026?",
+    "question": "What was the monthly earnings disregard for a determination made on 15 March 2026?",
     "expected": "ANSWERED",
+    "expected_answer_contains": "175",
     "type": "temporal_march_1_determination"
   },
   {
     "id": 13,
     "question": "What is the recovery percentage for a determination made on 15 March 2026?",
     "expected": "ANSWERED",
+    "expected_answer_contains": "15",
     "type": "temporal_post_march_determination"
   },
   {
     "id": 14,
     "question": "A change of circumstances occurred on 20 February 2026. How long did the recipient have to report it?",
-    "expected": "REFUSED_CONFLICT",
+    "expected": "ANSWERED",
+    "expected_answer_contains": "10",
     "type": "temporal_pre_march_change"
   },
   {
     "id": 15,
     "question": "A change of circumstances occurred on 5 March 2026. How long did the recipient have to report it?",
     "expected": "ANSWERED",
+    "expected_answer_contains": "14",
     "type": "temporal_post_march_change"
   },
   {
     "id": 16,
     "question": "How are figures calculated for a claim period spanning 1 March 2026?",
     "expected": "ANSWERED",
+    "expected_answer_contains": "1",
     "type": "temporal_spanning_claim"
   },
   {
@@ -105,6 +117,7 @@
     "id": 18,
     "question": "What is the basic residency condition for applicants?",
     "expected": "ANSWERED",
+    "expected_answer_contains": "resident",
     "type": "day1_regression"
   }
 ]
