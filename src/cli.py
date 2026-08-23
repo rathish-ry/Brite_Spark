@@ -75,5 +75,5 @@ def run_grounded_assistant(query: str, clauses: List[Clause], top_k: int = 5) ->
         return refusal.format_cli()
 
     generator = GroundedGenerator()
-    answer = generator.generate(query, decision.supported_clauses)
+    answer = generator.generate(query, decision.supported_clauses, full_corpus=clauses)
     return answer.format_cli()
