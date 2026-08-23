@@ -17,7 +17,15 @@ from src.contradiction import ContradictionDetector
 from src.generator import GroundedGenerator
 from src.citations import validate_citations
 from src.temporal import extract_temporal_context, filter_temporally_applicable_clauses
-from tests.evaluate import normalize_status
+from src.models import EvidenceStatus
+
+
+def normalize_status(status_enum) -> str:
+    if status_enum == EvidenceStatus.ANSWERABLE:
+        return "ANSWERED"
+    elif status_enum == EvidenceStatus.CONFLICT:
+        return "REFUSED_CONFLICT"
+    return "REFUSED"
 
 
 def audit_1_parser() -> bool:

@@ -1,5 +1,12 @@
+import sys
+from pathlib import Path
+_root = Path(__file__).resolve().parent.parent
+_tests = Path(__file__).resolve().parent
+sys.path.insert(0, str(_root))
+sys.path.insert(0, str(_tests))
+
 import unittest
-from tests.audit_system import (
+from audit_system import (
     audit_file_structure,
     audit_python_syntax,
     audit_policy_parsing,

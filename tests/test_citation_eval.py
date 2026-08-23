@@ -1,6 +1,13 @@
+import sys
+from pathlib import Path
+_root = Path(__file__).resolve().parent.parent
+_tests = Path(__file__).resolve().parent
+sys.path.insert(0, str(_root))
+sys.path.insert(0, str(_tests))
+
 import unittest
 from src.models import Clause
-from tests.evaluate_citations import verify_clause_support
+from evaluate_citations import verify_clause_support
 
 
 class TestCitationEvaluation(unittest.TestCase):

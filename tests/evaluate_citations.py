@@ -5,7 +5,7 @@ from pathlib import Path
 # Add project root to sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from src.parser import parse_markdown_policy
+from main import load_combined_corpus
 from src.cli import run_grounded_assistant
 from src.citations import extract_citation_tags, validate_citations
 from src.retriever import tokenize
@@ -25,16 +25,14 @@ def verify_clause_support(answer_text: str, cited_clause) -> bool:
 
 def run_citation_evaluation(policy_path: str = "data/policy.md", eval_path: str = "tests/evaluation.json"):
     policy_file = Path(policy_path)
+    amendment_file = policy_file.parent / "Amendment No. 2026-01.md"
     eval_file = Path(eval_path)
 
     if not policy_file.exists() or not eval_file.exists():
         print(f"ERROR: Missing input file(s) ({policy_file}, {eval_file})", file=sys.stderr)
         sys.exit(1)
 
-    with open(policy_file, "r", encoding="utf-8") as f:
-        policy_content = f.read()
-
-    clauses = parse_markdown_policy(policy_content, source_file=str(policy_file))
+    clauses = load_combined_corpus(policy_file, amendment_file)
     clause_map = {c.id.upper(): c for c in clauses}
 
     with open(eval_file, "r", encoding="utf-8") as f:

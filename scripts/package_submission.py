@@ -1,23 +1,34 @@
 import sys
 import unittest
+import json
 from pathlib import Path
 
-# Add project root to sys.path
+# Add project root and tests/ dir to sys.path
 root_dir = Path(__file__).resolve().parent.parent
+tests_dir = root_dir / "tests"
 sys.path.insert(0, str(root_dir))
+sys.path.insert(0, str(tests_dir))
 
-from tests.audit_system import (
+from audit_system import (
     audit_file_structure,
     audit_python_syntax,
     audit_policy_parsing,
     audit_eval_datasets,
 )
-from tests.evaluate import normalize_status
 from main import load_combined_corpus
+from src.models import EvidenceStatus
 from src.retriever import BM25Retriever
 from src.evidence_gate import EvidenceGate
 from src.temporal import extract_temporal_context, filter_temporally_applicable_clauses
-import json
+
+
+def normalize_status(status_enum) -> str:
+    if status_enum == EvidenceStatus.ANSWERABLE:
+        return "ANSWERED"
+    elif status_enum == EvidenceStatus.CONFLICT:
+        return "REFUSED_CONFLICT"
+    return "REFUSED"
+
 
 
 def check_required_artifacts() -> bool:

@@ -1,5 +1,12 @@
+import sys
+from pathlib import Path
+_root = Path(__file__).resolve().parent.parent
+_scripts = _root / "scripts"
+sys.path.insert(0, str(_root))
+sys.path.insert(0, str(_scripts))
+
 import unittest
-from scripts.final_verification import (
+from final_verification import (
     audit_1_parser,
     audit_2_retrieval,
     audit_3_evidence_gate,

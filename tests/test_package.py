@@ -1,5 +1,12 @@
+import sys
+from pathlib import Path
+_root = Path(__file__).resolve().parent.parent
+_scripts = _root / "scripts"
+sys.path.insert(0, str(_root))
+sys.path.insert(0, str(_scripts))
+
 import unittest
-from scripts.package_submission import check_required_artifacts, run_eval_benchmark
+from package_submission import check_required_artifacts, run_eval_benchmark
 
 
 class TestSubmissionPackaging(unittest.TestCase):
