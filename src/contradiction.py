@@ -1,8 +1,8 @@
 import re
 from dataclasses import dataclass
-from typing import List, Tuple, Set, Optional
+from typing import List, Tuple
 from src.models import Clause
-from src.retriever import tokenize, STOP_WORDS
+from src.retriever import tokenize
 
 
 @dataclass
@@ -17,15 +17,20 @@ class ContradictionResult:
 
 def extract_numerical_constraints(text: str) -> List[Tuple[int, str]]:
     """
-    Extracts numerical values paired with units (e.g. (30, 'days'), (15, 'days'), (50, 'percent')).
+    Extracts active numerical values paired with units (e.g. (30, 'days'), (15, 'days'), (50, 'percent')).
+    If text is an amendment substitution, extracts the substituted active value (after 'substitute').
     """
+    text_to_parse = text
+    sub_match = re.search(r"substitute\s+[\"'\*]*([^\n\"]+)[\"'\*]*", text, re.IGNORECASE)
+    if sub_match:
+        text_to_parse = sub_match.group(1)
+
     matches = []
-    # Pattern for numbers followed by units like days, weeks, months, percent, etc.
     pattern = re.compile(
         r"\b(\d+)\s*(calendar days?|business days?|days?|weeks?|months?|years?|percent|%)\b",
         re.IGNORECASE,
     )
-    for m in pattern.finditer(text):
+    for m in pattern.finditer(text_to_parse):
         val = int(m.group(1))
         unit = m.group(2).lower()
         if "day" in unit:
@@ -63,10 +68,9 @@ class ContradictionDetector:
                 # Check topic overlap between clauses
                 t1 = set(tokenize(f"{c1.section} {c1.heading} {c1.text}"))
                 t2 = set(tokenize(f"{c2.section} {c2.heading} {c2.text}"))
-                
+
                 shared_tokens = t1 & t2 & (query_tokens | {"appeal", "income", "day", "days", "limit", "period", "overpayment"})
-                
-                # Must share core policy keywords to be compared
+
                 if len(shared_tokens) < 1:
                     continue
 

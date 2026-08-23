@@ -1,22 +1,37 @@
 import argparse
 import sys
 from pathlib import Path
+from typing import List
+from src.models import Clause
 from src.parser import parse_markdown_policy
+from src.amendment_parser import parse_amendment_policy
 from src.cli import list_clauses, show_clause, run_grounded_assistant
 from src.interactive import run_interactive_session
 
 
-def load_policy(file_path: Path) -> str:
+def load_combined_corpus(
+    policy_path: Path = Path("data/policy.md"),
+    amendment_path: Path = Path("data/Amendment No. 2026-01.md"),
+) -> List[Clause]:
     """
-    
-    Loads the policy manual from the given file path.
-    Raises FileNotFoundError if the file does not exist.
+    Loads and parses original policy manual and Day 2 amendment into a combined clause list.
     """
-    if not file_path.exists():
-        raise FileNotFoundError(f"Policy manual not found at path: {file_path}")
-    
-    with open(file_path, "r", encoding="utf-8") as f:
-        return f.read()
+    clauses: List[Clause] = []
+
+    if policy_path.exists():
+        with open(policy_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        clauses.extend(parse_markdown_policy(content, source_file=str(policy_path)))
+
+    if amendment_path.exists():
+        with open(amendment_path, "r", encoding="utf-8") as f:
+            amd_content = f.read()
+        clauses.extend(parse_amendment_policy(amd_content, source_file=str(amendment_path)))
+
+    if not clauses:
+        raise FileNotFoundError(f"No policy or amendment files found at: {policy_path}")
+
+    return clauses
 
 
 def main():
@@ -40,7 +55,7 @@ def main():
         "-s",
         type=str,
         metavar="CLAUSE_ID",
-        help="Display full details and original text for a specific clause (e.g. C003)",
+        help="Display full details and original text for a specific clause (e.g. C003 or A2026-01-C01)",
     )
     parser.add_argument(
         "--query",
@@ -64,13 +79,12 @@ def main():
 
     args = parser.parse_args()
     policy_path = Path(args.policy_path)
+    amendment_path = policy_path.parent / "Amendment No. 2026-01.md"
 
     try:
-        content = load_policy(policy_path)
-        clauses = parse_markdown_policy(content, source_file=str(policy_path))
+        clauses = load_combined_corpus(policy_path, amendment_path)
     except FileNotFoundError as e:
         print(f"ERROR: {e}", file=sys.stderr)
-        print("\nPlease ensure the policy manual is placed at 'data/policy.md' or specify using --policy-path.", file=sys.stderr)
         sys.exit(1)
     except Exception as e:
         print(f"ERROR: Unexpected error loading policy: {e}", file=sys.stderr)

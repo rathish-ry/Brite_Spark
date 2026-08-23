@@ -30,9 +30,9 @@ class TestAmendmentParser(unittest.TestCase):
         self.assertEqual(target_map["C024"].applicability_type, "determination")
         self.assertIn("$175", target_map["C024"].text)
 
-        self.assertIn("C013", target_map)  # §4.3.2 10 -> 14 days
-        self.assertEqual(target_map["C013"].applicability_type, "change_of_circumstance")
-        self.assertIn("14 calendar days", target_map["C013"].text)
+        self.assertIn("C015", target_map)  # §4.3.2 10 -> 14 days
+        self.assertEqual(target_map["C015"].applicability_type, "change_of_circumstance")
+        self.assertIn("14 calendar days", target_map["C015"].text)
 
         self.assertIn("C038", target_map)  # §9.1.4 30 -> 14 days
         self.assertEqual(target_map["C038"].applicability_type, "change_of_circumstance")

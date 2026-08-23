@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass
-from typing import List, Set, Tuple
+from typing import List, Set
 from src.models import Clause
 
 
@@ -16,9 +16,9 @@ class CitationValidationResult:
 
 def extract_citation_tags(text: str) -> List[str]:
     """
-    Extracts clause citation tags matching pattern [C001], [C021], etc.
+    Extracts clause citation tags matching pattern [C001], [A2026-01-C01], [A2026-01 §1.1], etc.
     """
-    pattern = re.compile(r"\[(C\d{3})\]", re.IGNORECASE)
+    pattern = re.compile(r"\[([A-Z0-9\-_ §\.]+)\]", re.IGNORECASE)
     return [match.upper() for match in pattern.findall(text)]
 
 
@@ -37,7 +37,7 @@ def validate_citations(answer_text: str, approved_clauses: List[Clause]) -> Cita
         return CitationValidationResult(
             is_valid=False,
             cited_ids=[],
-            error_message="Answer contains substantive claims without clause citations (e.g. [C001]).",
+            error_message="Answer contains substantive claims without clause citations (e.g. [C001] or [A2026-01-C01]).",
         )
 
     # Check for invalid clause IDs

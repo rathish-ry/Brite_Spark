@@ -5,6 +5,7 @@ from src.retriever import BM25Retriever
 from src.evidence_gate import EvidenceGate
 from src.generator import GroundedGenerator
 from src.refusal import build_refusal_response
+from src.temporal import extract_temporal_context, filter_temporally_applicable_clauses
 
 
 def list_clauses(clauses: List[Clause]) -> None:
@@ -53,9 +54,12 @@ def show_clause(clauses: List[Clause], clause_id: str) -> bool:
 def run_grounded_assistant(query: str, clauses: List[Clause], top_k: int = 5) -> str:
     """
     Executes the end-to-end grounded assistant pipeline:
-    Question -> Retriever -> Evidence Gate (with Contradiction & Gap checks) -> Generator -> Citation Validation -> CLI Output.
+    Question -> Extract Temporal Context -> Filter Applicable Policy -> BM25 Retriever -> Evidence Gate -> Generator -> CLI Output.
     """
-    retriever = BM25Retriever(clauses)
+    ctx = extract_temporal_context(query)
+    applicable_clauses = filter_temporally_applicable_clauses(clauses, ctx)
+
+    retriever = BM25Retriever(applicable_clauses)
     results = retriever.retrieve(query, top_k=top_k)
 
     gate = EvidenceGate()

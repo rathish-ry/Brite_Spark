@@ -32,7 +32,7 @@ MONTH_MAP = {
 }
 
 DETERMINATION_CLAUSE_IDS = {"C024", "C026", "C048", "C048A"}
-CHANGE_OF_CIRCUMSTANCE_CLAUSE_IDS = {"C013", "C038"}
+CHANGE_OF_CIRCUMSTANCE_CLAUSE_IDS = {"C015", "C038"}
 
 
 def parse_date_to_iso(date_str: str) -> Optional[str]:

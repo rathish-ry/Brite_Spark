@@ -62,7 +62,7 @@ def parse_amendment_policy(content: str, source_file: str = "data/Amendment No. 
                         clause.amendment_type = "substitution"
                         clause.applicability_type = "determination"
                     elif "paragraph 2.1" in heading_lower or clause_text.startswith("**2.1**"):
-                        clause.target_clause_id = "C013"
+                        clause.target_clause_id = "C015"
                         clause.amendment_type = "substitution"
                         clause.applicability_type = "change_of_circumstance"
                     elif "paragraph 2.2" in heading_lower or clause_text.startswith("**2.2**"):

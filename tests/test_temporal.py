@@ -16,7 +16,7 @@ class TestTemporalPolicy(unittest.TestCase):
             id="C024", section="6.4 Disregards", heading="6.4 Disregards", text="$120 per month", source_start=10, source_end=15
         )
         self.c_orig_reporting = Clause(
-            id="C013", section="4.3 Change of Circumstances", heading="4.3.2 Time limits", text="10 calendar days", source_start=20, source_end=25
+            id="C015", section="4.3 Change of Circumstances", heading="4.3.2 Time limits", text="10 calendar days", source_start=20, source_end=25
         )
 
         # Amendment Clauses
@@ -44,7 +44,7 @@ class TestTemporalPolicy(unittest.TestCase):
             amendment_id="A2026-01",
             effective_date="2026-03-01",
             applicability_type="change_of_circumstance",
-            target_clause_id="C013",
+            target_clause_id="C015",
         )
 
         self.all_clauses = [
@@ -84,7 +84,7 @@ class TestTemporalPolicy(unittest.TestCase):
         applicable = filter_temporally_applicable_clauses(self.all_clauses, ctx)
         app_ids = [c.id for c in applicable]
 
-        self.assertIn("C013", app_ids)
+        self.assertIn("C015", app_ids)
         self.assertNotIn("A2026-01-C02", app_ids)
 
     def test_change_date_post_march(self):
@@ -96,7 +96,7 @@ class TestTemporalPolicy(unittest.TestCase):
         app_ids = [c.id for c in applicable]
 
         self.assertIn("A2026-01-C02", app_ids)
-        self.assertNotIn("C013", app_ids)
+        self.assertNotIn("C015", app_ids)
 
     def test_spanning_claim_period(self):
         # Claim spanning 1 March 2026 -> both original and amended clauses remain for apportionment
