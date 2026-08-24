@@ -63,7 +63,8 @@ class GroqGroundedGenerator:
             try:
                 from groq import Groq
                 if self.api_base:
-                    self._client = Groq(api_key=self.api_key, base_url=self.api_base)
+                    clean_base = self.api_base.replace("/openai/v1", "").replace("/v1", "").rstrip("/")
+                    self._client = Groq(api_key=self.api_key, base_url=clean_base or None)
                 else:
                     self._client = Groq(api_key=self.api_key)
             except Exception:

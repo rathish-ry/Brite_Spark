@@ -94,10 +94,10 @@ The assistant answers policy questions strictly using the supplied policy manual
    pip install -r requirements.txt
    ```
 
-### Groq API Configuration (Optional)
+### LLM Configuration (Optional)
 The system runs **100% offline out-of-the-box** using a deterministic fallback engine with zero external API calls. All unit tests and evaluation suites pass without any API key.
 
-To optionally enable live Groq LLM answer synthesis:
+To optionally enable live LLM answer synthesis:
 
 1. Copy the example environment file:
    ```bash
@@ -107,22 +107,22 @@ To optionally enable live Groq LLM answer synthesis:
    ```
 2. Open `.env` and set your key:
    ```env
-   GROQ_API_KEY=gsk_your_actual_key_here
-   GROQ_MODEL=openai/gpt-oss-120b
+   LLM_API_KEY=your_api_key_here
+   LLM_MODEL=openai/gpt-oss-120b
    ```
 
 Alternatively, set environment variables directly:
 
 **Windows PowerShell**:
 ```powershell
-$env:GROQ_API_KEY="your-groq-api-key-here"
-$env:GROQ_MODEL="openai/gpt-oss-120b"
+$env:LLM_API_KEY="your-api-key-here"
+$env:LLM_MODEL="openai/gpt-oss-120b"
 ```
 
 **Linux / macOS**:
 ```bash
-export GROQ_API_KEY="your-groq-api-key-here"
-export GROQ_MODEL="openai/gpt-oss-120b"
+export LLM_API_KEY="your-api-key-here"
+export LLM_MODEL="openai/gpt-oss-120b"
 ```
 
 ---
