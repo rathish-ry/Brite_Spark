@@ -52,15 +52,20 @@ class GroqGroundedGenerator:
     into structured, grounded natural-language answers.
     """
 
-    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
-        self.api_key = api_key or os.getenv("GROQ_API_KEY", "").strip() or os.getenv("LLM_API_KEY", "").strip()
-        self.model = model or os.getenv("GROQ_MODEL", "").strip() or os.getenv("LLM_MODEL", "").strip() or "openai/gpt-oss-120b"
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None, api_base: Optional[str] = None):
+        self.api_key = api_key or os.getenv("LLM_API_KEY", "").strip() or os.getenv("GROQ_API_KEY", "").strip()
+        self.model = model or os.getenv("LLM_MODEL", "").strip() or os.getenv("GROQ_MODEL", "").strip() or "openai/gpt-oss-120b"
+        self.api_base = api_base or os.getenv("LLM_API_BASE", "").strip() or os.getenv("GROQ_API_BASE", "").strip()
+        self.enabled = os.getenv("LLM_ENABLED", "true").strip().lower() not in ("false", "0", "no")
         self._client = None
 
-        if self.api_key:
+        if self.api_key and self.enabled:
             try:
                 from groq import Groq
-                self._client = Groq(api_key=self.api_key)
+                if self.api_base:
+                    self._client = Groq(api_key=self.api_key, base_url=self.api_base)
+                else:
+                    self._client = Groq(api_key=self.api_key)
             except Exception:
                 self._client = None
 
@@ -87,7 +92,7 @@ class GroqGroundedGenerator:
         ctx = temporal_context or extract_temporal_context(question)
         valid_ids: Set[str] = {c.id for c in approved_clauses}
 
-        if mode.lower() != "offline" and self._client and self.api_key:
+        if self.enabled and mode.lower() != "offline" and self._client and self.api_key:
             try:
                 evidence_prompt_blocks = []
                 for c in approved_clauses:
