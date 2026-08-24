@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 
 
@@ -6,7 +7,7 @@ class EvidenceGateConfig:
     """
     Centralized configuration parameters for Evidence Gate validation.
     """
-    min_retrieval_score: float = 0.25      # Minimum top BM25 normalized score required
-    min_term_coverage: float = 0.35        # Minimum query key-term coverage in evidence text
-    min_score_margin: float = 0.05         # Score margin indicating top candidate separation
-    top_k_eval: int = 5                    # Number of top retrieved clauses to evaluate
+    min_retrieval_score: float = float(os.getenv("MIN_RELEVANCE_SCORE", "0.25"))
+    min_term_coverage: float = float(os.getenv("MIN_SUPPORT_SCORE", "0.35"))
+    min_score_margin: float = 0.05
+    top_k_eval: int = int(os.getenv("RETRIEVAL_TOP_K", "5"))

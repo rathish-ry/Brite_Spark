@@ -53,8 +53,8 @@ class GroqGroundedGenerator:
     """
 
     def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
-        self.api_key = api_key or os.getenv("GROQ_API_KEY", "").strip()
-        self.model = model or os.getenv("GROQ_MODEL", "openai/gpt-oss-120b").strip()
+        self.api_key = api_key or os.getenv("GROQ_API_KEY", "").strip() or os.getenv("LLM_API_KEY", "").strip()
+        self.model = model or os.getenv("GROQ_MODEL", "").strip() or os.getenv("LLM_MODEL", "").strip() or "openai/gpt-oss-120b"
         self._client = None
 
         if self.api_key:
